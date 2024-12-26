@@ -1,0 +1,55 @@
+body, html {
+    width: 100%;
+    height: 100%;
+    margin:0;
+}
+
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000000;
+    height: 10%;
+}
+
+.game {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #944d4d;
+    height: 80%;
+}
+
+.foot{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000000;
+    height: 10%;
+    
+}
+
+
+.container {
+    height: 80%;
+    width: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000000;
+}
+.score {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0703f8;
+    height: 80%;
+    width: 20%;
+    
+}
+#myCanvas {
+    height: 99%;
+    width: 99%;
+    
+}
