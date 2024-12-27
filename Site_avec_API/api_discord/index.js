@@ -7,12 +7,13 @@ client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
 })
 
-//message no longer works so use messageCreate
 client.on('messageCreate', (msg) => {
     console.log(msg.content);
-    //if(msg.content === "ping"){
-    //    msg.reply("pong!!!");
-    //}
+    if(msg.content === "ping"){
+        msg.reply("pong!!!");
+    }
 })
 
 client.login(TOKEN);
+
+// use node index.js to run the bot in the folder
