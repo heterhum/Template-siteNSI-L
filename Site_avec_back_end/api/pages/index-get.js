@@ -9,7 +9,7 @@ const { promisify } = require('util')
 const readFileAsync = promisify(readFile)
 
 const READ_OPTIONS = { encoding: 'UTF-8' }
-const INDEX_URL = '../public/main.html'
+const INDEX_URL = './Site_avec_back_end/public/main.html'
 
 module.exports = async() => {
   // Récupérer le contenu du fichier HTML
