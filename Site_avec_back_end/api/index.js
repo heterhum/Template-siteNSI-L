@@ -4,8 +4,12 @@
 
 
 const express = require('express')
-const { spawn } = require('node:child_process');
 const app = express()
+const { spawn } = require('node:child_process');
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
 const PORT = 6300
 
 // Importer la logique de la page d'accueil
@@ -16,8 +20,8 @@ function runPythonScript(scriptPath, args, callback) {
     let data = '';
     pythonProcess.stdout.on('data', (chunk) => {
         //console.log(chunk.toString());
-        data += chunk.toString(); // Collect data from Python script
-        callback(null, data);
+        //data += chunk.toString(); // Collect data from Python script
+        callback(null, chunk.toString());
     });
     pythonProcess.stderr.on('data', (error) => { //gere les erreurs
         console.error(`stderr: ${error}`);
@@ -46,25 +50,36 @@ app.use((req, res, next) => {
 app.use(express.static('./Site_avec_back_end/public'))
 
 //permet de recevoir et enovyé des json depuis /submit
-app.use(express.json())
-app.post('/submit', async (req, res) => {
-    const data = await req.body; // Les données envoyées par le js public via fetch()
-    console.log('Données reçues:', parseInt(data["value"]));
-    runPythonScript('./Site_avec_back_end/server/calcul.py', [parseInt(data["value"])], (err, result) => {
+//app.use(express.json())
+//app.post('/submit', async (req, res) => {
+//    const data = await req.body; // Les données envoyées par le js public via fetch()
+//    console.log('Données reçues:', parseInt(data["value"]));
+//    runPythonScript('./Site_avec_back_end/server/calcul.py', [parseInt(data["value"])], (err, result) => {
+//        if (err) {
+//            console.log(err); }
+//        else {
+//            console.log('Données traitées:', result);
+//            res.json({
+//                message: 'Données reçues et traitées avec succès',
+//                receivedData: result
+//            });
+//        }
+//    }) //on vient de vérifié si y'a une erreur et de renvoyé la donné traité
+//  });
+var data = 0;
+io.on('connection', (socket) => {
+    console.log('a user connected');
+    //socket.emit('chat_message', "gay");
+    runPythonScript('./Site_avec_back_end/server/calcul.py', [1], (err, result) => {
         if (err) {
             console.log(err); }
         else {
-            console.log('Données traitées:', result);
-            res.json({
-                message: 'Données reçues et traitées avec succès',
-                receivedData: result
-            });
-        }
-    }) //on vient de vérifié si y'a une erreur et de renvoyé la donné traité
-  });
-
-
+            data+=1;
+            console.log('Données traitées', data);
+            socket.emit('chat_message',result)};
+    });
+});
 //démmarage !
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Serveur démarré : http://localhost:${PORT}`)
-})
+});
