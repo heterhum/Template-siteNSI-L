@@ -19,9 +19,10 @@ function runPythonScript(scriptPath, args, callback) {
     const pythonProcess = spawn('python', [scriptPath].concat(args)); //comme dans un terminale
     let data = '';
     pythonProcess.stdout.on('data', (chunk) => {
-        //console.log(chunk.toString());
-        //data += chunk.toString(); // Collect data from Python script
-        callback(null, chunk.toString());
+        data += chunk.toString(); // Collect data from Python script
+        //callback(null, chunk.toString().split("]]"));
+        console.log(data.toString());
+        callback(null, data.toString());
     });
     pythonProcess.stderr.on('data', (error) => { //gere les erreurs
         console.error(`stderr: ${error}`);
