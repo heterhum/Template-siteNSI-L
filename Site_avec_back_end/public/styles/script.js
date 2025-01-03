@@ -34,7 +34,6 @@ var c=0;
 const socket = io();
 socket.on('chat_message', (msg) => {
     c+=1;
-    console.log('message: ' + msg);
+    console.log('message: ', c,"arrivé");
     console.log(JSON.parse(msg));
-    console.log(c);
 });
