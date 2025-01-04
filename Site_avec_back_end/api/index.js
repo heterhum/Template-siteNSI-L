@@ -21,7 +21,7 @@ function runPythonScript(scriptPath, args, callback) {
     pythonProcess.stdout.on('data', (chunk) => {
         data += chunk.toString(); // Collect data from Python script
         //callback(null, chunk.toString().split("]]"));
-        console.log(JSON.parse(data.toString()));
+        //console.log(data.toString());
         callback(null, data.toString());
     });
     pythonProcess.stderr.on('data', (error) => { //gere les erreurs
