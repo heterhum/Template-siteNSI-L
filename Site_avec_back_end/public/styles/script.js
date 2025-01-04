@@ -30,71 +30,45 @@
 //      console.log('Réponse du serveur:', data.receivedData); //console du naviguateur
 //      document.getElementsByClassName('uwu')[0].innerHTML = parseInt(data.receivedData);
 //    })
-var c=0;
-var newm="";
-const socket = io();
-socket.on('chat_message', (msg) => {
-    c+=1;
-    newm=msg.split("\r\n");
-    console.log(newm[0]);
-    newm=JSON.parse(newm[0]);
-    console.log('message: ', c,"arrivé");
-    console.log(newm); 
-    newm="";
-});
-
-function domloaded(){
-    window.c = document.getElementById("myCanvas");
-    window.ctx = c.getContext("2d");
-    window.largeur=50;
-    window.longueur=50;
-    c.width = c.offsetWidth;
-    c.height = c.offsetHeight;
-    console.log(c.width,c.height)
-    window.taille=parseInt(c.width/largeur);
-}
-function doit(){
-    ctx.moveTo(0, 0);
-    ctx.lineTo(200, 100);
-    ctx.stroke();
-}
-function doit1(){
-    ctx.moveTo(0, 0);
-    ctx.lineTo(100, 200);
-    ctx.stroke();
-}
-function getMousePos(canvas, evt) {
-    var rect = canvas.getBoundingClientRect();
-    return {
-        x: (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
-        y: (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
-    };
-  }
-
-function draw(e){
-
-    let a=[]
-    for (let i = 0; i < largeur; i++) {
-        let b=[]
-        for (let j = 0; j < longueur; j++) {
-            b[j]=0
-        }
-        a[i]=b
-    }
-    for (let i=0;i<a.length; i++){
-        for (let j=0;j<a.length; j++){
-            if (a[i][j]==0){ 
-                ctx.fillStyle="pink";
-                ctx.fillRect(j*taille,i*taille,taille,taille)
-            }  else{
-                ctx.fillStyle="black";
-                ctx.fillRect(j*taille,i*taille,taille,taille)
-            }
-            ctx.strokeRect(j*taille, i*taille, taille, taille)
-        }
-    }
-    //var pos=getMousePos(c,e);
-    //console.log(pos.x,pos.y)
-    //ctx.arc(pos.x, pos.y, 2, 0, 2 * Math.PI);
-    //ctx.stroke();
-}
+//window.onload = function() {
+//var c=0;
+//var newm="";
+//var plist=[];
+//const socket = io();
+//const canvas = document.getElementById("myCanvas");
+//const ctx = canvas.getContext("2d");
+//canvas.width = 6;
+//canvas.height = 6;
+//const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+//const data = imageData.data;
+//
+//function decimalToRgb(decimal) {
+//    return {
+//      red: (decimal >> 16) & 0xff,
+//      green: (decimal >> 8) & 0xff,
+//      blue: decimal & 0xff,
+//    };
+//  }
+//
+//while (true){
+//    socket.on('chat_message', (msg) => {
+//        c+=1;
+//        newm=msg.split("\r\n");
+//        for (let i=0;i<newm.length;i++){
+//            let u = JSON.parse(newm[i]);
+//            u= [].concat(...u);
+//            plist.pusht([u]);
+//        }
+//        newm="";
+//    });
+//    if (plist[0]!=undefined){
+//        for (let i=0;data.length;i++){
+//            let h=decimalToRgb(plist[0][i]);
+//            data[i]=h.red;
+//            data[i+1]=h.green;
+//            data[i+2]=h.blue;
+//        };
+//        ctx.putImageData(imageData, 0, 0);
+//    }
+//}
+//};
