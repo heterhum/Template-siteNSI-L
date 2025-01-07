@@ -10,6 +10,7 @@ const io = new Server(server);
 const PORT = 5500;
 const TOKEN = process.env.TOKEN;
 
+
 const client = new Client({
   intents:[
       GatewayIntentBits.Guilds,
@@ -17,7 +18,7 @@ const client = new Client({
       GatewayIntentBits.GuildMessageReactions,
       GatewayIntentBits.MessageContent,
       ]
-      });
+});
 
 
 // Genere page html de l'acceuil + css + js +img ect ...
@@ -35,15 +36,12 @@ var message=  "";
 client.on('messageCreate', (msg) => {
   console.log(msg.content);
   message = msg.content;
+  io.emit("discord", message);
   });
 io.on ('connection', (socket) => {
   console.log('a user connected');
-  socket.on('want', async(msg) => {
-    socket.emit('discord',message);
-    console.log("ok")
-    message = "";
 });
-});
+
 
 //démmarage !
 client.on('ready', () => {
