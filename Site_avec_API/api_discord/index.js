@@ -19,6 +19,7 @@ const client = new Client({
       ]
       });
 
+
 // Genere page html de l'acceuil + css + js +img ect ...
 app.get('/', async(req, res) => {
   res.sendFile("C:/Users/xoxar/Desktop/perso/code/Template-siteNSI/Site_avec_API/public/main.html")
@@ -29,22 +30,25 @@ app.use((req, res, next) => {
 });
 app.use(express.static('./Site_avec_API/public'));
 
+// Gestion des messages
+var message=  "";
 client.on('messageCreate', (msg) => {
   console.log(msg.content);
-  io.on('connection', (socket) => {
-      socket.emit('discord',msg.content)
+  message = msg.content;
   });
-
-  if(msg.content === "ping"){
-      msg.reply("pong!!!");
-  }
-})
+io.on('connection', (socket) => {
+  console.log('a user connected');
+  socket.on('want', (msg) => {
+    socket.emit('discord',message);
+  message = "";
+});
+});
 
 //démmarage !
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}`);
 })
 client.login(TOKEN);
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Serveur démarré : http://localhost:${PORT}`)
 })
