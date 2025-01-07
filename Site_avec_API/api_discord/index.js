@@ -7,7 +7,7 @@ const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
-const PORT = 7000;
+const PORT = 5500;
 const TOKEN = process.env.TOKEN;
 
 const client = new Client({
@@ -36,19 +36,20 @@ client.on('messageCreate', (msg) => {
   console.log(msg.content);
   message = msg.content;
   });
-io.on('connection', (socket) => {
+io.on ('connection', (socket) => {
   console.log('a user connected');
-  socket.on('want', (msg) => {
+  socket.on('want', async(msg) => {
     socket.emit('discord',message);
-  message = "";
+    console.log("ok")
+    message = "";
 });
 });
 
 //démmarage !
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}`);
-})
+});
 client.login(TOKEN);
 server.listen(PORT, () => {
   console.log(`Serveur démarré : http://localhost:${PORT}`)
-})
+});

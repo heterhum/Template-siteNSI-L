@@ -9,7 +9,16 @@ socket.on("connect_error", (err) => {
 socket.on ("discord", (msg) => {
     console.log(msg);
 });
+//
+//function uwu(){
+//    socket.emit("want", true);
+//}
 
-function uwu(){
-    socket.emit("want", true);
-}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+while (true){
+    //sleep(2000).then(() => { socket.emit("want", true); });
+    setTimeout(() => {  console.log('World!'); }, 2000);
+};
