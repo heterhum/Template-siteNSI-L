@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits } = require('discord.js');
+const { Client, GatewayIntentBits,Collection, Intents } = require('discord.js');
 require('dotenv').config();
 
 const express = require('express');
@@ -9,7 +9,7 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 const PORT = 5500;
 const TOKEN = process.env.TOKEN;
-
+var guild ="";
 
 const client = new Client({
   intents:[
@@ -37,23 +37,25 @@ client.on('messageCreate', (msg) => {
   console.log(msg.content);
   message = msg.content;
   user=msg.author.username;
-  io.emit("discord", {"message":message,
-                      "user":user});
+  io.emit("discord", {"message":message,"user":user});
   });
 
 io.on ('connection', (socket) => {
   console.log('a user connected');
   socket.on("usermessage",(msg) =>{
     const channel = client.channels.cache.get('1085275930831888446');
-    console.log(msg);
-    channel.send(msg);
-    
+    console.log(msg.username,":",msg.usermsg);
+    channel.send( "from : " + msg.username+"\n"+msg.usermsg);
   });
 });
 
 //démmarage !
+//TO DO
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}`);
+  guild=client.guilds.cache.get("1085275930022400082");
+  channel=guild.channels;
+  console.log(channel);
 });
 client.login(TOKEN);
 server.listen(PORT, () => {
