@@ -36,12 +36,20 @@ var message=  "";
 client.on('messageCreate', (msg) => {
   console.log(msg.content);
   message = msg.content;
-  io.emit("discord", message);
+  user=msg.author.username;
+  io.emit("discord", {"message":message,
+                      "user":user});
   });
+
 io.on ('connection', (socket) => {
   console.log('a user connected');
+  socket.on("usermessage",(msg) =>{
+    const channel = client.channels.cache.get('1085275930831888446');
+    console.log(msg);
+    channel.send(msg);
+    
+  });
 });
-
 
 //démmarage !
 client.on('ready', () => {
