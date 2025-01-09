@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits,Collection, Intents } = require('discord.js');
+const { Client, GatewayIntentBits} = require('discord.js');
 require('dotenv').config();
 
 const express = require('express');
@@ -17,6 +17,7 @@ const client = new Client({
       GatewayIntentBits.GuildMessages,
       GatewayIntentBits.GuildMessageReactions,
       GatewayIntentBits.MessageContent,
+      //GatewayIntentBits.Guild,
       ]
 });
 
@@ -24,6 +25,15 @@ const client = new Client({
 // Genere page html de l'acceuil + css + js +img ect ...
 app.get('/', async(req, res) => {
   res.sendFile("C:/Users/xoxar/Desktop/perso/code/Template-siteNSI/Site_avec_API/public/main.html")
+});
+app.use((req, res, next) => {
+  res.set('X-Content-Type-Options', 'nosniff');
+  next();
+});
+app.use(express.static('./Site_avec_API/public'));
+
+app.get('/chat', async(req, res) => {
+  res.sendFile("C:/Users/xoxar/Desktop/perso/code/Template-siteNSI/Site_avec_API/public/chat.html")
 });
 app.use((req, res, next) => {
   res.set('X-Content-Type-Options', 'nosniff');
@@ -55,7 +65,8 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}`);
   guild=client.guilds.cache.get("1085275930022400082");
   channel=guild.channels;
-  console.log(channel);
+  //console.log(channel);
+
 });
 client.login(TOKEN);
 server.listen(PORT, () => {
