@@ -1,10 +1,14 @@
 'use strict'
 /* eslint-env ,ode, es6*/
 
+
+//document.cookie = "user_session="+Math.random(); "path=/"; "max-age=3600"; "SameSite=Strict";
 const socket = io();
 var username="";
 function getUsername(){
   username = document.querySelector('#username').value;
+  socket.emit('Nameforid', username);
+  console.log(username);
 };
 function getMessage(){
   var usermsg = document.querySelector('#message').value;
@@ -22,5 +26,10 @@ socket.on("connect_error", (err) => {
 socket.on ("discord", (msg) => {
     console.log(msg.user,":", msg.message);
     document.getElementById('nop').innerHTML+='<br>'+ msg.user+":"+msg.message;
+});
+socket.on("cookie", (msg) => {
+    console.log("reçue");
+    document.cookie = "caca="+msg;"path=/"; "max-age=3600"; "SameSite=Strict";
+    console.log(document.cookie);
 });
 
