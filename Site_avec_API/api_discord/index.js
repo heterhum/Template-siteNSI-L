@@ -77,7 +77,7 @@ io.on ('connection', (socket) => {
     console.log(msg.username,":",msg.usermsg);
     channel.send( "from : " + msg.username+"\n"+msg.usermsg);
   });
-  socket.on('Nameforid',msg=>{
+  socket.on('Nameforid',msg=>{    //si nom reçu alors envoie cookie
     console.log('namereçue')
     var cookieuser= getRandomInt(numbergen);
     io.emit("cookie",cookieuser);

@@ -27,7 +27,7 @@ socket.on ("discord", (msg) => {
     console.log(msg.user,":", msg.message);
     document.getElementById('nop').innerHTML+='<br>'+ msg.user+":"+msg.message;
 });
-socket.on("cookie", (msg) => {
+socket.on("cookie", (msg) => { //quand cookie reçu alors l'applique, meme quand page changée il reste
     console.log("reçue");
     document.cookie = "caca="+msg;"path=/"; "max-age=3600"; "SameSite=Strict";
     console.log(document.cookie);
