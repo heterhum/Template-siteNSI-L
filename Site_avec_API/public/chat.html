@@ -8,13 +8,21 @@
   <title>Calcul</title>
 </head>
 <body>
-    <h2>JavaScript Discord</h2>
-    <input type="text" id="username" name="username" maxlength="512" placeholder="username">
-    <button id="apply" onclick=getUsername()>apply</button>
     <div class="total">
-        <div id="salon"></div>
+        
+        <div id="other">
+            <h2 id="title">JavaScript Discord</h2>
+            
+            <div id="users">
+                <input type="text" id="username" name="username" maxlength="512" placeholder="username">
+                <button id="apply" onclick=getUsername()>apply</button>
+            </div>
+            <div id="salon"></div>
+        </div>
+        
         <div id="chat">
-            <div id="message"></div>
+            
+            <div id="messages"></div>
             <div id="inputbox">
                 <input type="text" id="message" name="message" maxlength="2000" placeholder="message">
                 <button id="send" onclick=getMessage()>send</button>
