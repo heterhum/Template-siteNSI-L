@@ -26,6 +26,8 @@ const client = new Client({
       ]
 });
 
+// Liste des utilisateurs
+// to do : retiré ceux deconnecté a bout de x temps
 var userlist={};
 // Fonction pour générer un nombre aléatoire
 function getRandomInt(max) {
@@ -48,8 +50,8 @@ app.use((req, res, next) => {
 app.use(express.static('./Site_avec_API/public'));
 //-------------------------------------
 app.get('/chat', async(req, res) => {
-  console.log(req.cookies);
-  if (req.cookies.caca in userlist){
+  //console.log(req.cookies+" trying rejoin\n"+userlist);
+  if (req.cookies.acces_cookie in userlist){
     res.sendFile("C:/Users/xoxar/Desktop/perso/code/Template-siteNSI/Site_avec_API/public/chat.html")
   } else {
     res.redirect('/');
@@ -64,7 +66,6 @@ app.use(express.static('./Site_avec_API/public'));
 // Gestion des messages
 var message=  "";
 client.on('messageCreate', (msg) => {
-  console.log(msg.content);
   message = msg.content;
   user=msg.author.username;
   io.emit("discord", {"message":message,"user":user});
@@ -74,16 +75,19 @@ io.on ('connection', (socket) => {
   console.log('a user connected');
   socket.on("usermessage",(msg) =>{
     const channel = client.channels.cache.get('1085275930831888446');
-    console.log(msg.username,":",msg.usermsg);
-    channel.send( "from : " + msg.username+"\n"+msg.usermsg);
+    console.log(msg.id);
+    channel.send( "from : " + userlist[msg.id]+"\n"+msg.usermsg);
   });
   socket.on('Nameforid',msg=>{    //si nom reçu alors envoie cookie
-    console.log('namereçue')
+    console.log('name received');
     var cookieuser= getRandomInt(numbergen);
     io.emit("cookie",cookieuser);
     var username = msg;
     userlist[cookieuser]=username;
-    console.log(userlist);
+  });
+  socket.on("ChangeName",msg=>{ //to do : add error if username already exist
+    userlist[msg.cookie]=msg.username;
+    console.log("name changed")
   });
 });
 
@@ -93,7 +97,6 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}`);
   guild=client.guilds.cache.get("1085275930022400082");
   channel=guild.channels;
-  //console.log(channel);
 
 });
 client.login(TOKEN);
