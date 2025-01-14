@@ -50,7 +50,7 @@ app.use((req, res, next) => {
 app.use(express.static('./Site_avec_API/public'));
 //-------------------------------------
 app.get('/chat', async(req, res) => {
-  //console.log(req.cookies+" trying rejoin\n"+userlist);
+  console.log(req.cookies," trying rejoin\n",userlist);
   if (req.cookies.acces_cookie in userlist){
     res.sendFile("C:/Users/xoxar/Desktop/perso/code/Template-siteNSI/Site_avec_API/public/chat.html")
   } else {
@@ -81,7 +81,8 @@ io.on ('connection', (socket) => {
   socket.on('Nameforid',msg=>{    //si nom reçu alors envoie cookie
     console.log('name received');
     var cookieuser= getRandomInt(numbergen);
-    io.emit("cookie",cookieuser);
+    socket.to(socket.id).emit("cookie",cookieuser);
+    console.log("send",socket.id,msg);
     var username = msg;
     userlist[cookieuser]=username;
   });
