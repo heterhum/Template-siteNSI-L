@@ -1,8 +1,6 @@
 'use strict'
 /* eslint-env ,ode, es6*/ 
 
-
-
 const express = require('express')
 const app = express()
 const { spawn } = require('node:child_process');
@@ -50,23 +48,6 @@ app.use((req, res, next) => {
 
 app.use(express.static('./Site_avec_back_end/public'))
 
-//permet de recevoir et enovyé des json depuis /submit
-//app.use(express.json())
-//app.post('/submit', async (req, res) => {
-//    const data = await req.body; // Les données envoyées par le js public via fetch()
-//    console.log('Données reçues:', parseInt(data["value"]));
-//    runPythonScript('./Site_avec_back_end/server/calcul.py', [parseInt(data["value"])], (err, result) => {
-//        if (err) {
-//            console.log(err); }
-//        else {
-//            console.log('Données traitées:', result);
-//            res.json({
-//                message: 'Données reçues et traitées avec succès',
-//                receivedData: result
-//            });
-//        }
-//    }) //on vient de vérifié si y'a une erreur et de renvoyé la donné traité
-//  });
 var data = 0;
 io.on('connection', (socket) => {
     console.log('a user connected');
@@ -84,3 +65,6 @@ io.on('connection', (socket) => {
 server.listen(PORT, () => {
   console.log(`Serveur démarré : http://localhost:${PORT}`)
 });
+
+
+// Site bug

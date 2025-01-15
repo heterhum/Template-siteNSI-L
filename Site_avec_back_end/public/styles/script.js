@@ -53,6 +53,7 @@ window.onload = function() {
     
     socket.on ('chat_message', (msg) => {
         c+=1;
+        console.log(msg);
         newm=msg.split("\r\n");
         for (let i=0;i<newm.length;i++){
             let u = JSON.parse(newm[i]);
@@ -60,6 +61,7 @@ window.onload = function() {
             plist.push([u]);
         }
         newm="";
+        console.log(plist)
     
         
         if (plist[0]!=undefined){
@@ -68,6 +70,7 @@ window.onload = function() {
                 data[i]=h.red;
                 data[i+1]=h.green;
                 data[i+2]=h.blue;
+                console.log("1 pixel done")
             };
             ctx.putImageData(imageData, 0, 0);
             console.log("done");

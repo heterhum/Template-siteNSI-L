@@ -3,7 +3,6 @@ require('dotenv').config();
 
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const cookie = require('cookie');
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
@@ -16,7 +15,7 @@ app.use(cookieParser());
 const numbergen=17;
 const stringselec = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-const client = new Client({
+const client = new Client({ //to do : find a way to acces salon ID
   intents:[
       GatewayIntentBits.Guilds,
       GatewayIntentBits.GuildMessages,
@@ -24,7 +23,7 @@ const client = new Client({
       GatewayIntentBits.MessageContent,
       //GatewayIntentBits.Guild,
       ]
-});
+}); 
 
 // Liste des utilisateurs
 // to do : retiré ceux deconnecté a bout de x temps
@@ -64,6 +63,7 @@ app.use((req, res, next) => {
 app.use(express.static('./Site_avec_API/public'));
 
 // Gestion des messages
+
 var message=  "";
 client.on('messageCreate', (msg) => {
   message = msg.content;
@@ -81,19 +81,18 @@ io.on ('connection', (socket) => {
   socket.on('Nameforid',msg=>{    //si nom reçu alors envoie cookie
     console.log('name received');
     var cookieuser= getRandomInt(numbergen);
-    socket.to(socket.id).emit("cookie",cookieuser);
+    io.to(socket.id).emit("cookie",cookieuser);
     console.log("send",socket.id,msg);
     var username = msg;
     userlist[cookieuser]=username;
   });
-  socket.on("ChangeName",msg=>{ //to do : add error if username already exist
+  socket.on("ChangeName",msg=>{   //to do : add error if username already exist
     userlist[msg.cookie]=msg.username;
     console.log("name changed")
   });
 });
 
 //démmarage !
-//TO DO
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}`);
   guild=client.guilds.cache.get("1085275930022400082");
