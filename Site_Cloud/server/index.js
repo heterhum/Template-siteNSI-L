@@ -9,6 +9,31 @@ const PORT = 3000;
 const path = require('path');
 app.use(cookieParser());
 
+async function main(){
+  /**
+   * Connection URI. Update <username>, <password>, and <your-cluster-url> to reflect your cluster.
+   * See https://docs.mongodb.com/ecosystem/drivers/node/ for more details
+   */
+  const uri = "mongodb+srv://<username>:<password>@<your-cluster-url>/test?retryWrites=true&w=majority";
+
+
+  const client = new MongoClient(uri);
+
+  try {
+      // Connect to the MongoDB cluster
+      await client.connect();
+
+      // Make the appropriate DB calls
+      await  listDatabases(client);
+
+  } catch (e) {
+      console.error(e);
+  } finally {
+      await client.close();
+  }
+}
+
+main().catch(console.error);
 // Genere page html de l'acceuil + css + js +img ect ...
 app.get('/', async(req, res) => {
   res.sendFile(path.resolve(__dirname, '../public/main.html'));
