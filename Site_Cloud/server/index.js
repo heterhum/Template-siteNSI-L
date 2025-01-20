@@ -31,19 +31,19 @@ async function main(client){
 };
 
 // Genere page html de l'acceuil + css + js +img ect ...
-app.use('/user/:usern', function(err,req,res,next)  { // TO DO : dynamique parametre
-    var user = req.params;
-    console.log(user);
-    var data=main(client).catch(console.error);
-    //res.sendFile(path.resolve(__dirname, '../public/main.html'));
-    res.send(user)
-    next();
+app.get('/users/:username', (req,res)=>  { 
+  var user = req.params.username
+  var data=main(client).catch(console.error);
+  console.log(path.join(__dirname, '../Template-siteNSI/Site_Cloud/public/main.html'))
+  res.sendFile(path.join(__dirname, '../Template-siteNSI/Site_Cloud/public/main.html')); // TO DO : here
+  //res.sendFile("./Site_Cloud/public/main.html") // TO DO : here
+  io.emit("chat",{"user":user,"data":data})
 });
 app.use((req, res, next) => {
   res.set('X-Content-Type-Options', 'nosniff');
   next();
 });
-app.use(express.static('./Site_cloud/public'));
+app.use(express.static('./Template-siteNSI/Site_cloud/public'));
 
 //démmarage !
 server.listen(PORT, () => {
