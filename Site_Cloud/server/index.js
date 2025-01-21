@@ -53,7 +53,7 @@ app.get('/user/:uid', function(req, res){
   var filepath=path.join(__dirname,"Site_Cloud","public","main.html")
   res.sendFile(filepath);
 });
-app.use('/static',express.static(__dirname+'/Template-siteNSI/Site_cloud/public'));
+app.use(express.static(__dirname+'/Template-siteNSI/Site_cloud/public')); // TO DO : here
 
 //démmarage !
 server.listen(PORT, () => {
