@@ -31,19 +31,29 @@ async function main(client){
 };
 
 // Genere page html de l'acceuil + css + js +img ect ...
-app.get('/users/:username', (req,res)=>  { 
-  var user = req.params.username
-  var data=main(client).catch(console.error);
-  console.log(path.join(__dirname, '../Template-siteNSI/Site_Cloud/public/main.html'))
-  res.sendFile(path.join(__dirname, '../Template-siteNSI/Site_Cloud/public/main.html')); // TO DO : here
-  //res.sendFile("./Site_Cloud/public/main.html") // TO DO : here
-  io.emit("chat",{"user":user,"data":data})
+//app.get('/users/:username', (req,res)=>  { 
+//  var user = req.params.username
+//  var data=main(client).catch(console.error);
+//  //console.log(path.join(__dirname, '../Template-siteNSI/Site_Cloud/public/main.html'))
+//  //res.sendFile(path.join(__dirname, '../Template-siteNSI/Site_Cloud/public/main.html')); // TO DO : here
+//  //res.sendFile("./Site_Cloud/public/main.html") // TO DO : here
+//  var path=req.params[0] ? req.params[0]: "main.html";
+//  res.sendFile(path,{root:'c:/Users/xoxar/Desktop/perso/code/Template-siteNSI/Site_CLoud/public'});
+//  io.emit("chat",{"user":user,"data":data})
+//});
+
+//app.use('/users/:username', (req, res, next) => {
+//  req.url = req.params.asset; // <-- programmatically update url yourself
+//  express.static(__dirname + '/public')(req, res, next);
+//});   
+
+
+app.get('/user/:uid', function(req, res){
+  var uid = req.params.uid
+  var filepath=path.join(__dirname,"Site_Cloud","public","main.html")
+  res.sendFile(filepath);
 });
-app.use((req, res, next) => {
-  res.set('X-Content-Type-Options', 'nosniff');
-  next();
-});
-app.use(express.static('./Template-siteNSI/Site_cloud/public'));
+app.use('/static',express.static(__dirname+'/Template-siteNSI/Site_cloud/public'));
 
 //démmarage !
 server.listen(PORT, () => {
