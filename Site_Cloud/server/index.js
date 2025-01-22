@@ -48,12 +48,15 @@ async function main(client){
 //});   
 
 
-app.get('/user/:uid', function(req, res){
+app.get('/user/:uid', function(req, res) {
   var uid = req.params.uid
   var filepath=path.join(__dirname,"Site_Cloud","public","main.html")
-  res.sendFile(filepath);
+  res.sendFile (filepath);
 });
-app.use(express.static(__dirname+'/Template-siteNSI/Site_cloud/public')); // TO DO : here
+console.log(__dirname+'/Site_cloud/public')
+//app.use(express.static(__dirname+'/Template-siteNSI/Site_cloud/public')); // TO DO : here
+app.use('/static',express.static(__dirname+'/Site_cloud/public'));
+app.use(io.emit("chat",{"user":uid,"data":data}))
 
 //démmarage !
 server.listen(PORT, () => {
