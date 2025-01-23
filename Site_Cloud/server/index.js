@@ -12,12 +12,15 @@ const PORT = 3000;
 const path = require('path');
 const __dirname = path.resolve();
 app.use(cookieParser());
+app.set("views", path.join(__dirname, "/Site_cloud/server/views"));
+app.set("view engine", "ejs");
 require('dotenv').config();
+
 
 const mongodb = require('mongodb');
 const uri = process.env.URI;
 const client = new mongodb.MongoClient('mongodb://127.0.0.1:27017');
-async function main(client){
+async function main(client,name){
   try {
       // Connect to the MongoDB cluster
       await client.connect();
@@ -29,34 +32,24 @@ async function main(client){
       console.error(e);
       await client.close();}
 };
+var d = main(client,"heter").catch(console.error).then(d);
+d.then(console.log(d))
 
 // Genere page html de l'acceuil + css + js +img ect ...
 //app.get('/users/:username', (req,res)=>  { 
 //  var user = req.params.username
 //  var data=main(client).catch(console.error);
-//  //console.log(path.join(__dirname, '../Template-siteNSI/Site_Cloud/public/main.html'))
-//  //res.sendFile(path.join(__dirname, '../Template-siteNSI/Site_Cloud/public/main.html')); // TO DO : here
-//  //res.sendFile("./Site_Cloud/public/main.html") // TO DO : here
-//  var path=req.params[0] ? req.params[0]: "main.html";
-//  res.sendFile(path,{root:'c:/Users/xoxar/Desktop/perso/code/Template-siteNSI/Site_CLoud/public'});
-//  io.emit("chat",{"user":user,"data":data})
-//});
-
-//app.use('/users/:username', (req, res, next) => {
-//  req.url = req.params.asset; // <-- programmatically update url yourself
-//  express.static(__dirname + '/public')(req, res, next);
-//});   
+//});  
 
 
 app.get('/user/:uid', function(req, res) {
   var uid = req.params.uid
   var filepath=path.join(__dirname,"Site_Cloud","public","main.html")
-  res.sendFile (filepath);
+  //res.sendFile (filepath);
+  res.render('HPuser',{"titre":uid})
 });
-console.log(__dirname+'/Site_cloud/public')
 //app.use(express.static(__dirname+'/Template-siteNSI/Site_cloud/public')); // TO DO : here
 app.use('/static',express.static(__dirname+'/Site_cloud/public'));
-app.use(io.emit("chat",{"user":uid,"data":data}))
 
 //démmarage !
 server.listen(PORT, () => {
