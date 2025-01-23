@@ -1,6 +1,5 @@
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
-
 const express = require('express');
 const app = express();
 const cookieParser = require('cookie-parser');
@@ -18,37 +17,40 @@ require('dotenv').config();
 
 
 const mongodb = require('mongodb');
-const uri = process.env.URI;
+//const uri = process.env.URI;
 const client = new mongodb.MongoClient('mongodb://127.0.0.1:27017');
 async function main(client,name){
   try {
       await client.connect();
-
-      const test =await client.db("myDB").collection("DB").find({"user": name}).toArray();
+      const tofind= 'users.'+ name +'.exist';
+      const userdata =await client.db("myDB").collection("DB").find({[tofind]:true}).toArray();
       await client.close();
-      return test
+      return userdata;
   } catch (e) {
       console.error(e);
       await client.close();}
 };
-//var d=await main(client,"heterhum").catch(console.error);
-//console.log(d[0].heter);
 
 // Genere page html de l'acceuil + css + js +img ect ...
-//app.get('/users/:username', (req,res)=>  { 
-//  var user = req.params.username
-//  var data=main(client).catch(console.error);
-//});  
+app.get('/', async function(req, res) {
+  var filepath=path.join(__dirname,"Site_Cloud","public","main.html")
+  res.sendFile (filepath);
+});
+app.use('/static',express.static(__dirname+'/Site_cloud/public'));
+
 
 
 app.get('/user/:uid', async function(req, res) {
   var uid = req.params.uid;
-  var d= await main(client,uid).catch(console.error);
-  console.log(d);
-  res.render('HPuser',{"titre":d[0].heter});
+  var data= await main(client,uid).catch(console.error);
+  console.log(data)
+  if (data!=undefined && data.length>0){
+    res.render('HPuser',{"pp":data.users[uid].pp,"name":uid}); //TO DO : here
+  } else{ 
+    res.redirect('/');
+  };
 });
-//app.use(express.static(__dirname+'/Template-siteNSI/Site_cloud/public')); // TO DO : here
-app.use('/static',express.static(__dirname+'/Site_cloud/public'));
+app.use('/static',express.static(__dirname+'/Site_cloud/server/views'));
 
 //démmarage !
 server.listen(PORT, () => {
@@ -59,3 +61,4 @@ server.listen(PORT, () => {
 //later
   //var filepath=path.join(__dirname,"Site_Cloud","public","main.html")
   //res.sendFile (filepath);
+  //app.use('/static',express.static(__dirname+'/Site_cloud/public'));
