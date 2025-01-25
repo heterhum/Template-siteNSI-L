@@ -44,8 +44,8 @@ app.get('/user/:uid', async function(req, res,next) {
   var uid = req.params.uid;
   var data= await main(client,uid).catch(console.error);
   if (data!=undefined && data.length>0){
+    req.uide=uid;  // TO DO : faire passé la variale uid a travers les middlewares
     res.render('HPuser',{"pp":data[0]["users"][uid]["pp"],"name":uid,"txt":"flag.txt"}); 
-    req.uide=uid; // TO DO : faire passé la variale uid a travers les middlewares
     console.log(req.uide);
     next();
   } else{ 
@@ -53,9 +53,9 @@ app.get('/user/:uid', async function(req, res,next) {
   };
 });
 app.use('/static',express.static(__dirname+'/Site_cloud/server/views'),(req,res,next)=>{next()});
-app.use('/fluid', (req, res, next) => {
-  var uid=req.uide;
-  console.log(req.uide," good")
+app.use('/user/:uid/fluid', (req, res, next) => {
+  var uid=req.params.uid;
+  console.log(req.params.uid," good")
   express.static(__dirname+'/Site_cloud/public/Personnal_file/'+uid)(req,res,next); // TO DO :here
 });
 
