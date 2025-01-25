@@ -40,26 +40,23 @@ app.use('/static',express.static(__dirname+'/Site_cloud/public'));
 
 
 
-app.get('/user/:uid', async function(req, res) {
+app.get('/user/:uid', async function(req, res,next) {
   var uid = req.params.uid;
   var data= await main(client,uid).catch(console.error);
-  console.log(data);
   if (data!=undefined && data.length>0){
     res.render('HPuser',{"pp":data[0]["users"][uid]["pp"],"name":uid,"txt":"flag.txt"}); 
-    res.locals.uid=uid;
+    req.uide=uid; // TO DO : faire passé la variale uid a travers les middlewares
+    console.log(req.uide);
+    next();
   } else{ 
     res.redirect('/');
   };
 });
-app.use('/static', (req, res, next) => {
-  express.static(__dirname+'/Site_cloud/server/views') // TO DO :here
-  next();
-});
+app.use('/static',express.static(__dirname+'/Site_cloud/server/views'),(req,res,next)=>{next()});
 app.use('/fluid', (req, res, next) => {
-  uid=res.locals.uid;
-  express.static(__dirname+'/Site_cloud/public/Personnal_files/'+uid) // TO DO :here
-  
-  next();
+  var uid=req.uide;
+  console.log(req.uide," good")
+  express.static(__dirname+'/Site_cloud/public/Personnal_file/'+uid)(req,res,next); // TO DO :here
 });
 
 //démmarage !
