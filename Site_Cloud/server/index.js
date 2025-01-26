@@ -74,7 +74,6 @@ app.use('/user/:uid/fluid', (req, res, next) => {
 
 app.post('/upload', upload.single('file'), (req, res) => {
   try {
-    console.log(req.file);
     res.status(204).send()
   } catch (err) {
     res.status(400).send({ error: err.message });
