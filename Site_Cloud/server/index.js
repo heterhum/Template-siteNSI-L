@@ -10,11 +10,11 @@ const io = new Server(server);
 const PORT = 3000;
 const path = require('path');
 const __dirname = path.resolve();
+import multer from 'multer';
 app.use(cookieParser());
 app.set("views", path.join(__dirname, "/Site_cloud/server/views"));
 app.set("view engine", "ejs");
 require('dotenv').config();
-
 
 const mongodb = require('mongodb');
 //const uri = process.env.URI;
@@ -31,10 +31,22 @@ async function main(client,name){
       await client.close();}
 };
 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    // Dossier où les fichiers seront enregistrés
+    cb(null, "C:/Users/xoxar/Desktop/perso/code/Template-siteNSI/Site_Cloud/public/Personnal_file/heterhum/");
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage: storage });
 // Genere page html de l'acceuil + css + js +img ect ...
 app.get('/', async function(req, res) {
   var filepath=path.join(__dirname,"Site_Cloud","public","main.html")
-  res.sendFile (filepath);
+  res.sendFile(filepath);
 });
 app.use('/static',express.static(__dirname+'/Site_cloud/public'));
 
@@ -57,6 +69,11 @@ app.use('/user/:uid/fluid', (req, res, next) => {
   var uid=req.params.uid;
   console.log(req.params.uid," good")
   express.static(__dirname+'/Site_cloud/public/Personnal_file/'+uid)(req,res,next); 
+});
+
+app.post("/upload",(req, res) =>{
+  console.log(req);
+  upload.single("file")
 });
 
 //démmarage !
