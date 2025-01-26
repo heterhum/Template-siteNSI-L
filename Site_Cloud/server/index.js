@@ -32,17 +32,17 @@ async function main(client,name){
 };
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    // Dossier où les fichiers seront enregistrés
-    cb(null, "C:/Users/xoxar/Desktop/perso/code/Template-siteNSI/Site_Cloud/public/Personnal_file/heterhum/");
+  destination: function (req, file, callback) {
+    callback(null, path.join(__dirname,"Site_Cloud","public","Personnal_file","heterhum")); // TO DO : pouvoir changé le nom du dossier en fonction de l'utilisateur
   },
-  filename: function (req, file, cb) {
+  filename: function (req, file, callback) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    callback(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
   }
 });
 
 const upload = multer({ storage: storage });
+
 // Genere page html de l'acceuil + css + js +img ect ...
 app.get('/', async function(req, res) {
   var filepath=path.join(__dirname,"Site_Cloud","public","main.html")
@@ -71,10 +71,17 @@ app.use('/user/:uid/fluid', (req, res, next) => {
   express.static(__dirname+'/Site_cloud/public/Personnal_file/'+uid)(req,res,next); 
 });
 
-app.post("/upload",(req, res) =>{
-  console.log(req);
-  upload.single("file")
+
+app.post('/upload', upload.single('file'), (req, res) => {
+  try {
+    console.log(req.file);
+    res.status(204).send()
+  } catch (err) {
+    res.status(400).send({ error: err.message });
+  }
 });
+
+
 
 //démmarage !
 server.listen(PORT, () => {

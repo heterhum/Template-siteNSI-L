@@ -10,7 +10,7 @@
     <a href="/user/<%= name %>/fluid/<%=txt%>" download="flag.txt">Download</a>
     <br>
     <br>
-    <form action="/upload" method="post" class="form-example">
+    <form action="/upload" method="post" enctype="multipart/form-data">
         <input type="file" name="file" id="file" required />
         <br>
         <input type="submit" value="Send" />
