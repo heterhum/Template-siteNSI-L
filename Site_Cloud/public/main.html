@@ -9,18 +9,22 @@
 <body>
     <H1>Site cloud</H1>
     <div id="connect">
-        <input type="text" id="connectname" placeholder="Name">
-        <br>
-        <input type="password" id="connectemdp" placeholder="MDP">
-        <br>
-        <button onclick="connect()">Connect</button>
+        <form action="/login" method="post">
+            <input type="text" id="connectname" placeholder="Name" name="connectname">
+            <br>
+            <input type="password" id="connectemdp" placeholder="MDP" name="connectmdp">
+            <br>
+            <input type="submit" value="Send" />
+        </form>
     </div>
     <div id="create">
-        <input type="text" id="createname" placeholder="Name">
-        <br>
-        <input type="password" id="createemdp" placeholder="MDP">
-        <br>
-        <button onclick="createacc()">createacc</button>
+        <form action="/createlogin" method="post">
+            <input type="text" id="createname" placeholder="Name" name="createname">
+            <br>
+            <input type="password" id="createmdp" placeholder="MDP" name="createmdp">
+            <br>
+            <input type="submit" value="Send" />
+        </form>
     </div>
 </body>
 </html>

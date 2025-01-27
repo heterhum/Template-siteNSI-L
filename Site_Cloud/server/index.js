@@ -31,17 +31,19 @@ async function main(client,name){
       await client.close();}
 };
 
-const storage = multer.diskStorage({
-  destination: function (req, file, callback) {
-    callback(null, path.join(__dirname,"Site_Cloud","public","Personnal_file","heterhum")); // TO DO : pouvoir changé le nom du dossier en fonction de l'utilisateur
-  },
-  filename: function (req, file, callback) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    callback(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-  }
-});
-
-const upload = multer({ storage: storage });
+function permulter(userID){
+  const storage = multer.diskStorage({
+    destination: function (req, file, callback) {
+      callback(null, path.join(__dirname,"Site_Cloud","public","Personnal_file",userID)); // TO DO : pouvoir changé le nom du dossier en fonction de l'utilisateur
+    },
+    filename: function (req, file, callback) {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      callback(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    }
+  });
+  var upload = multer({ storage: storage });
+  return upload
+};
 
 // Genere page html de l'acceuil + css + js +img ect ...
 app.get('/', async function(req, res) {
@@ -49,7 +51,9 @@ app.get('/', async function(req, res) {
   res.sendFile(filepath);
 });
 app.use('/static',express.static(__dirname+'/Site_cloud/public'));
-
+app.post("/login", (req, res) => { // TO DO : fix
+  console.log(req.body.connectname);
+});
 
 
 app.get('/user/:uid', async function(req, res,next) {
@@ -72,12 +76,15 @@ app.use('/user/:uid/fluid', (req, res, next) => {
 });
 
 
-app.post('/upload', upload.single('file'), (req, res) => {
-  try {
-    res.status(204).send()
-  } catch (err) {
-    res.status(400).send({ error: err.message });
-  }
+app.post('/upload/:uid', (req, res) => { // Ajouté sécurité, si l'utilisateur modifie le action post avec f12 alors il peut upload ou il veut
+  permulter(req.params.uid).single('file')(req, res, function (err) {
+    try {
+      console.log("it's working", req.params.uid)
+      res.status(204).send()
+    } catch (err) {
+      res.status(400).send({ error: err.message });
+    }
+  });
 });
 
 
