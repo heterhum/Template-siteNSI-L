@@ -1,16 +1,19 @@
-const container = document.querySelector('.image-container');
-const image = document.querySelector('.zoom-image');
+window.addEventListener("DOMContentLoaded", (event) => {
 
-container.addEventListener('mousemove', (e) => {
-  const { left, top, width, height } = container.getBoundingClientRect();
-  const x = ((e.clientX - left) / width - 0.5) * 2; // Position X normalisée (-1 à 1)
-  const y = ((e.clientY - top) / height - 0.5) * 2; // Position Y normalisée (-1 à 1)
+    const container = document.getElementById("image-container");
+    const image = document.getElementById('zoom-image');
+    const body = document.getElementById('d');
 
-  // Ajuste la transformation de l'image
-  image.style.transform = `scale(1.2) translateX(${x * 10}px) translateY(${y * 10}px)`;
-});
+    //body.style.bakcgroundcolor = "red";
 
-container.addEventListener('mouseleave', () => {
-  // Réinitialise la transformation
-  image.style.transform = 'scale(1)';
+    container.addEventListener('mousemove', (e) => {
+      const x = e.clientX 
+      const y = e.clientY 
+
+      body.style.bakcgroundcolor = "red";
+    });
+//container.addEventListener('mouseleave', () => {
+//
+//  image.style.transform = 'scale(1)';
+//});
 });
