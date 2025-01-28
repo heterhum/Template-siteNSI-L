@@ -51,8 +51,13 @@ app.get('/', async function(req, res) {
   res.sendFile(filepath);
 });
 app.use('/static',express.static(__dirname+'/Site_cloud/public'));
-app.post("/login", (req, res) => { // TO DO : fix
-  console.log(req.body.connectname);
+
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json());
+app.post("/login", (req, res) =>{ // TO DO : fix
+  console.log("test")
+  console.log(req.body)
+  res.status(204).send()
 });
 
 
