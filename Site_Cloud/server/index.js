@@ -54,7 +54,7 @@ app.use('/static',express.static(__dirname+'/Site_cloud/public'));
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
-app.post("/login", (req, res) =>{ // TO DO : fix
+app.post("/login", (req, res) =>{ // TO DO : systeme de cookie pour la connexion
   console.log("test")
   console.log(req.body)
   res.status(204).send()
