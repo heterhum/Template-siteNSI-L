@@ -8,8 +8,9 @@ body {
     overflow: hidden;
   }
   
-.image-container {
+#image-container {
   width: 400px;
   height: 300px;
-  transform: rotateY(4deg);
+  transform: rotateY(2deg);
+  transform:  rotateX(50deg);
 }
