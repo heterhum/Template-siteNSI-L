@@ -16,21 +16,28 @@ app.set("views", path.join(__dirname, "/Site_cloud/server/views"));
 app.set("view engine", "ejs");
 require('dotenv').config();
 
-const mongodb = require('mongodb');
+
+// Database
+const mongodb = require('mongodb'); 
 //const uri = process.env.URI;
 const client = new mongodb.MongoClient('mongodb://127.0.0.1:27017');
-async function main(client,name){
+async function main(client,name){ //TO DO : find a way to modify the database
   try {
       await client.connect();
       const tofind= 'users.'+ name +'.exist';
-      const userdata =await client.db("myDB").collection("DB").find({[tofind]:true}).toArray();
+      var userdata =await client.db("myDB").collection("DB").find({[tofind]:true}).toArray();
+      //console.log(userdata)
+      let d = userdata[0]["users"][name]
       await client.close();
-      return userdata;
+      return d;
   } catch (e) {
       console.error(e);
+      console.log("l'utilisateur n'existe pas")
       await client.close();}
 };
 
+
+// Upload file
 function permulter(userID){
   const storage = multer.diskStorage({
     destination: function (req, file, callback) {
@@ -46,27 +53,44 @@ function permulter(userID){
 };
 
 // Genere page html de l'acceuil + css + js +img ect ...
-app.get('/', async function(req, res) {
+app.get('/', async function(req, res) { // main page
   var filepath=path.join(__dirname,"Site_Cloud","public","main.html")
   res.sendFile(filepath);
 });
 app.use('/static',express.static(__dirname+'/Site_cloud/public'));
 
+//--------------------------------------------------------------
+
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
-app.post("/login", (req, res) =>{ // TO DO : systeme de cookie pour la connexion
-  console.log("test")
-  console.log(req.body)
-  res.status(204).send()
+app.post("/login", async function (req, res) { // TO DO : systeme de cookie pour la connexion
+  console.log("1")
+  const password = req.body.connectpassword;
+  const username = req.body.connectusername;
+
+  var data = await main(client,username).catch(console.error)
+  console.log("2")
+  console.log(data.password,password)
+  if (data.password==password){
+    res.redirect('/user/'+username)
+    console.log("3")
+  } else {
+    res.status(204).send()
+    console.log("4")
+  }
 });
 
+//--------------------------------------------------------------
 
-app.get('/user/:uid', async function(req, res,next) {
+app.get('/user/:uid', async function(req, res,next) { // TO DO : systeme de cookie pour la connexion
   var uid = req.params.uid;
   var data= await main(client,uid).catch(console.error);
-  if (data!=undefined && data.length>0){
+  console.log(uid,data)
+  console.log()
+  if (data!=undefined){
+    console.log("good")
     req.uide=uid;  
-    res.render('HPuser',{"pp":data[0]["users"][uid]["pp"],"name":uid,"txt":data[0]["users"][uid]["file"]["01"]}); //Bien organiser
+    res.render('HPuser',{"pp":data["pp"],"name":uid,"txt":data["file"]["01"]}); //Bien organiser
     console.log(req.uide);
     next();
   } else{
@@ -74,12 +98,13 @@ app.get('/user/:uid', async function(req, res,next) {
   };
 });
 app.use('/static',express.static(__dirname+'/Site_cloud/server/views'),(req,res,next)=>{next()});
-app.use('/user/:uid/fluid', (req, res, next) => {
+app.use('/user/:uid/fluid', (req, res, next) => { // TO DO : Verif securité aprés systeme de cookie
   var uid=req.params.uid;
   console.log(req.params.uid," good")
   express.static(__dirname+'/Site_cloud/public/Personnal_file/'+uid)(req,res,next); 
 });
 
+//--------------------------------------------------------------
 
 app.post('/upload/:uid', (req, res) => { // Ajouté sécurité, si l'utilisateur modifie le action post avec f12 alors il peut upload ou il veut
   permulter(req.params.uid).single('file')(req, res, function (err) {
