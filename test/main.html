@@ -1,15 +1,72 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <title>Effet Zoom 3D</title>
-  <link rel="stylesheet" href="/test/style.css">
-  <script src="/test/script.js"></script>
-</head>
-<body id="d">
-  <div id="image-container">
-    <img src="https://fr.wikipedia.org/static/images/icons/wikipedia.png" alt="Image Zoom" id="zoom-image">
-  </div>
-  <button id="myButton"></button>
-</body>
+  <head>
+    <meta charset="utf-8">
+    <title>fond blanc miniwiki</title>
+    <link href="style.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="wikipedia.png">
+  </head>
+  <body>
+    <header>
+      <img id="imgmenu" src="https://fr.m.wikipedia.org/w/load.php?modules=skins.minerva.icons&image=menu&format=original&lang=fr&skin=minerva&version=4lifi">
+      <img id="logo" src="https://fr.m.wikipedia.org/static/images/mobile/copyright/wikipedia-wordmark-fr.svg">
+      <input type="text" id="search" placeholder="Rechercher"></input>
+    </header>
+    <main id="content" class="mw-body">
+      <div class="pre-content heading-holder">
+        <div class="page-heading">
+          <h1 id="firstHeading" class="firstHeading mw-first-heading">Fichier:Fond blanc.svg</h1>
+        </div>
+        
+        <nav class="page-actions-menu">
+          <ul id="p-views" class="page-actions-menu__list">
+            <li id="language-selector" class="page-actions-menu__list-item">
+              <a role="button" title="Langue" class="cdx-button cdx-button--icon-only language-selector disabled">
+                <img src="https://fr.m.wikipedia.org/w/load.php?modules=skins.minerva.icons&image=language&format=original&lang=fr&skin=minerva&version=4lifi">
+                <span>Langue</span>
+              </a>
+            </li>
+            <li id="page-actions-watch" class="page-actions-menu__list-item">
+              <a role="button" id="ca-watch" title="Suivre" class="cdx-button cdx-button--icon-only">
+                <img src="https://fr.m.wikipedia.org/w/load.php?modules=skins.minerva.icons&image=star&format=original&lang=fr&skin=minerva&version=4lifi">
+                <span>Suivre</span>
+              </a>
+            </li>
+            <li id="page-actions-edit" class="page-actions-menu__list-item">
+              <a role="button" id="ca-edit" title="Ajouter une description locale" class="cdx-button cdx-button--icon-only edit-page">
+                <img src="https://fr.m.wikipedia.org/w/load.php?modules=skins.minerva.icons&image=edit&format=original&lang=fr&skin=minerva&version=4lifi">
+                <span>Ajouter une description locale</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div id="bodyContent" class="content">
+        <div id="mw-content-text" class="mw-body-content">
+          <ul id="filetoc" role="navigation">
+            <li><a >Fichier</a></li>
+            <li><a >Historique du fichier</a></li>
+            <li><a >Utilisation du fichier</a></li>
+            <li><a >Usage global du fichier</a></li>
+          </ul>
+          <div class="fullImageLink" id="file">
+            <a>
+              <img alt="Fichier:Fond blanc.svg" src="//upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Fond_blanc.svg/500px-Fond_blanc.svg.png" width="500" height="300">
+            </a>
+            <div class="mw-filepage-resolutioninfo">
+              Taille de cet aperçu PNG pour ce fichier SVG :
+              <a href="//upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Fond_blanc.svg/500px-Fond_blanc.svg.png">500 × 300 pixels</a>.
+            </div>
+          </div>
+          <div class="mw-content-ltr fullMedia">
+            <p>
+              <bdi>
+                <a href="//upload.wikimedia.org/wikipedia/commons/6/6e/Fond_blanc.svg" title="Fond blanc.svg">Fichier d’origine</a>
+              </bdi>
+              <span class="fileInfo">(Fichier SVG, nominalement de 500 × 300 pixels, taille : 354 octet)</span>
+            </p>
+          </div>
+      </div>
+    </main>
+  </body>
 </html>
