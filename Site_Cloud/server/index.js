@@ -1,3 +1,4 @@
+import { create } from "domain";
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const express = require('express');
@@ -18,6 +19,27 @@ require('dotenv').config();
 
 const numbergen=17;
 const stringselec = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+const templateuser = {
+    "username": "",
+    "password": "",
+    "pp": "",
+    "cookie": {
+      "date": "",
+      "usercookie": ""
+    },
+    "file": {}
+};
+const templatefile = {
+  "realname": {
+    "date": "",
+    "name": "",
+    "size": "",
+    "extention": ""
+  }
+};
+
+
 
 function cookiegenerator(max) {
   var l = ""
@@ -45,6 +67,7 @@ async function see_user_data(client,name){
       console.error(e);
       await client.close();}
 };
+
 async function modifie_user_data(client,name,modifplace,modif){ 
   const modification={[modifplace]:modif}
   try {
@@ -62,12 +85,18 @@ async function modifie_user_data(client,name,modifplace,modif){
       console.error(e);
       await client.close();}
 };
-async function create_new_user(client,name,password){ //TO DO : allow new user creation
-  const modification={[modifplace]:modif}
+
+async function create_new_user(client,name,password,pp){ 
+  var newuser=templateuser;
+  newuser["username"]=name;
+  newuser["password"]=password;
+  if (pp){
+    newuser["pp"]=pp;
+  } else {newuser["pp"]="default.png"; };
   try {
       await client.connect();
       try {
-        await client.db("myDB").collection("users").updateOne({"username":name},{$set:modification});
+        await client.db("myDB").collection("users").insertOne(newuser);
         await client.close();
         return true
       } catch (e) {
@@ -79,6 +108,28 @@ async function create_new_user(client,name,password){ //TO DO : allow new user c
       console.error(e);
       await client.close();}
 };
+
+//TO DO : systeme creation de fichier
+
+async function delete_user(client,name){ 
+  const query = { "username": name };
+  try {
+      await client.connect();
+      try {
+        await client.db("myDB").collection("users").deleteOne(query);
+        await client.close();
+        return true
+      } catch (e) {
+        console.error(e);
+        await client.close();
+        return false
+      }
+  } catch (e) {
+      console.error(e);
+      await client.close();}
+};
+
+
 
 // Upload file
 function permulter(userID){
