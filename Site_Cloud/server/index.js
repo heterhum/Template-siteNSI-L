@@ -45,6 +45,12 @@ function cookiegenerator(max) {
   return l;
 }
 
+function dategenerator() {
+  const timeElapsed = Date.now();
+  const today = new Date(timeElapsed);
+  return today.toISOString();
+}
+
 // Database
 const mongodb = require('mongodb'); 
 //const uri = process.env.URI;
@@ -146,7 +152,7 @@ async function delete_user(client,name){
       await client.close();}
 };
 //! Database
-
+add_user_file(client,"heterhum","testname",dategenerator(),"faketest",0,"test/tt")
 // Upload file
 function permulter(userID){
   const storage = multer.diskStorage({
@@ -229,12 +235,24 @@ app.post('/upload/:uid', (req, res) => { // Ajouté sécurité, si l'utilisateur
   permulter(req.params.uid).single('file')(req, res, function (err) {
     try {
       console.log(req.params.uid, " successfully uploaded a file")
+      var filenamecomp = req.file.filename.split(".");
+      var filenamecut = filenamecomp[0];
+
+      const name =req.params.uid
+      const filename = filenamecut
+      const date = dategenerator()
+      const fakename = req.file.originalname
+      const size = req.file.size
+      const type = req.file.mimetype
+
+      add_user_file(client,name,filename,date,fakename,size,type)
       res.status(204).send()
     } catch (err) {
       console.log(req.params.uid, " fail to uploaded a file")
       res.status(400).send({ error: err.message });
     }
-  });
+  });// TO DO : Ajouté le fichier dans la DB
+  
 });
 
 
