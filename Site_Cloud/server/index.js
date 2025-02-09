@@ -31,15 +31,11 @@ const templateuser = {
     "file": {}
 };
 const templatefile = {
-  "realname": {
     "date": "",
     "name": "",
     "size": "",
     "extention": ""
-  }
 };
-
-
 
 function cookiegenerator(max) {
   var l = ""
@@ -109,7 +105,28 @@ async function create_new_user(client,name,password,pp){
       await client.close();}
 };
 
-//TO DO : systeme creation de fichier
+async function add_user_file(client,name,filename,date,fakename,size,extention){ 
+  var newfile=templatefile;
+  newfile["date"]=date;
+  newfile["name"]=fakename;
+  newfile["size"]=size;
+  newfile["extention"]=extention;
+  var place = "file."+filename
+  try {
+      await client.connect();
+      try {
+        await client.db("myDB").collection("users").updateOne({"username":name},{$set:{[place]:newfile}});
+        await client.close();
+        return true
+      } catch (e) {
+        console.error(e);
+        await client.close();
+        return false
+      }
+  } catch (e) {
+      console.error(e);
+      await client.close();}
+};
 
 async function delete_user(client,name){ 
   const query = { "username": name };
@@ -128,8 +145,7 @@ async function delete_user(client,name){
       console.error(e);
       await client.close();}
 };
-
-
+//! Database
 
 // Upload file
 function permulter(userID){
