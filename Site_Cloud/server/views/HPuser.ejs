@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1><%= name %></h1>
-    <a href="/user/<%= name %>/fluid/<%=txt%>" download="flag.txt">Download</a>
+    <a>Download</a>
     <br>
     <br>
     <form action="/upload/<%= name %>" method="post" enctype="multipart/form-data">
@@ -15,6 +15,15 @@
         <br>
         <input type="submit" value="Send" />
     </form>
+    <br>
+    <ul>
+        <%if (datafile.length == 0) { %>
+            <li>No files</li>
+        <% } else {
+         for(let key in datafile) { %>
+            <li id="<%= key %>"><a href="/user/<%= name %>/file/<%= key + '.' + datafile[key]['extention']%>" download><%= datafile[key]["name"] %></a></li>
+        <% }} %>
+    </ul>
 
 </body>
 </html>

@@ -34,6 +34,7 @@ const templatefile = {
     "date": "",
     "name": "",
     "size": "",
+    "mime-type": "",
     "extention": ""
 };
 
@@ -111,12 +112,16 @@ async function create_new_user(client,name,password,pp){
       await client.close();}
 };
 
-async function add_user_file(client,name,filename,date,fakename,size,extention){ 
+async function add_user_file(client,name,filename,date,fakename,size,extention){ //maybe put an random at the end of the filename so we can reconize it, but keep the original name somewhere
   var newfile=templatefile;
+  var ext=fakename.split(".");
+  ext=ext[ext.length-1];
+
   newfile["date"]=date;
   newfile["name"]=fakename;
   newfile["size"]=size;
-  newfile["extention"]=extention;
+  newfile["mime-type"]=extention;
+  newfile["extention"]=ext;
   var place = "file."+filename
   try {
       await client.connect();
@@ -152,7 +157,7 @@ async function delete_user(client,name){
       await client.close();}
 };
 //! Database
-add_user_file(client,"heterhum","testname",dategenerator(),"faketest",0,"test/tt")
+
 // Upload file
 function permulter(userID){
   const storage = multer.diskStorage({
@@ -216,7 +221,11 @@ app.get('/user/:uid', async function(req, res,next) { // TO DO : systeme de cook
   if (data!=null){
     console.log(uid," is now on his own cloud")
     req.uide=uid;  
-    res.render('HPuser',{"pp":data["pp"],"name":uid,"txt":data["file"]["01"]}); //Bien organiser
+    res.render('HPuser',
+      {"pp":data["pp"],
+       "name":uid,
+       "datafile":data["file"],
+      }); //Bien organiser
     next();
   } else{
     res.redirect('/');
@@ -224,7 +233,7 @@ app.get('/user/:uid', async function(req, res,next) { // TO DO : systeme de cook
   };
 });
 app.use('/static',express.static(__dirname+'/Site_cloud/server/views'),(req,res,next)=>{next()});
-app.use('/user/:uid/fluid', (req, res, next) => { // TO DO : Verif securité aprés systeme de cookie
+app.use('/user/:uid/file', (req, res, next) => { // TO DO : Verif securité aprés systeme de cookie
   var uid=req.params.uid;
   express.static(__dirname+'/Site_cloud/public/Personnal_file/'+uid)(req,res,next); 
 });
