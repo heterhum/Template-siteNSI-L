@@ -114,8 +114,7 @@ async function create_new_user(client,name,password,pp){
 
 async function add_user_file(client,name,filename,date,fakename,size,extention){ //maybe put an random at the end of the filename so we can reconize it, but keep the original name somewhere
   var newfile=templatefile;
-  var ext=fakename.split(".");
-  ext=ext[ext.length-1];
+  var ext=path.extname(fakename);
 
   newfile["date"]=date;
   newfile["name"]=fakename;
@@ -165,8 +164,8 @@ function permulter(userID){
       callback(null, path.join(__dirname,"Site_Cloud","public","Personnal_file",userID)); // TO DO : pouvoir changé le nom du dossier en fonction de l'utilisateur
     },
     filename: function (req, file, callback) {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-      callback(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+      const uniqueSuffix = cookiegenerator(10);
+      callback(null, file.originalname.split('.')[0] +"-"+ uniqueSuffix + path.extname(file.originalname));
     }
   });
   var upload = multer({ storage: storage });
@@ -244,11 +243,9 @@ app.post('/upload/:uid', (req, res) => { // Ajouté sécurité, si l'utilisateur
   permulter(req.params.uid).single('file')(req, res, function (err) {
     try {
       console.log(req.params.uid, " successfully uploaded a file")
-      var filenamecomp = req.file.filename.split(".");
-      var filenamecut = filenamecomp[0];
 
       const name =req.params.uid
-      const filename = filenamecut
+      const filename = req.file.filename.split('.')[0]
       const date = dategenerator()
       const fakename = req.file.originalname
       const size = req.file.size
