@@ -71,6 +71,21 @@ async function see_user_data(client,name){
       await client.close();}
 };
 
+async function see_user_cookie(client,cookie){ 
+  try {
+      await client.connect();
+      var userdata =await client.db("myDB").collection("users").findOne({"cookie.usercookie":cookie});
+      await client.close();
+      if (userdata){
+        return userdata.username
+      } else {
+        return null
+      }
+  } catch (e) {
+      console.error(e);
+      await client.close();}
+};
+
 async function modifie_user_data(client,name,modifplace,modif){ 
   const modification={[modifplace]:modif}
   try {
@@ -175,8 +190,13 @@ function permulter(userID){
 // Genere page html de l'acceuil + css + js +img ect ...
 app.get('/', async function(req, res) { // main page
   var filepath=path.join(__dirname,"Site_Cloud","public","main.html")
+  const puser =await see_user_cookie(client,req.cookies.usercookie) // TO DO : Bouton de login / deconection direct sur la page user
+  if (puser != null){
+    res.redirect('/user/'+puser)
+  } else {
   res.sendFile(filepath);
   console.log("someone is on the main page")
+  }
 });
 app.use('/static',express.static(__dirname+'/Site_cloud/public'));
 
@@ -184,13 +204,16 @@ app.use('/static',express.static(__dirname+'/Site_cloud/public'));
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
-app.post("/login", async function (req, res) { // TO DO : systeme de cookie pour la connexion
+app.post("/login", async function (req, res) { 
   const password = req.body.connectpassword;
   const username = req.body.connectusername;
 
   var data = await see_user_data(client,username).catch(console.error)
 
   if (data.password==password && data!=null){
+    const usercookie = cookiegenerator(numbergen)
+    await modifie_user_data(client,username,"cookie.usercookie",usercookie) 
+    res.cookie("usercookie",usercookie)
     res.redirect('/user/'+username)
     console.log(username, " connected successfully")
   } else {
@@ -217,7 +240,7 @@ app.post("/create", async function (req, res) { // TO DO : systeme de cookie pou
 app.get('/user/:uid', async function(req, res,next) { // TO DO : systeme de cookie pour la connexion
   var uid = req.params.uid;
   var data= await see_user_data(client,uid).catch(console.error);
-  if (data!=null){
+  if (data!=null && req.cookies.usercookie==data.cookie.usercookie){
     console.log(uid," is now on his own cloud")
     req.uide=uid;  
     res.render('HPuser',
