@@ -21,7 +21,7 @@
             <li>No files</li>
         <% } else {
          for(let key in datafile) { %>
-            <li id="<%= key %>"><a href="/user/<%= name %>/file/<%= key + datafile[key]['extention']%>" download><%= datafile[key]["name"] %></a></li>
+            <li id="<%= key %>"><a href="/<%= name %>/file/<%= key + datafile[key]['extention']%>" download><%= datafile[key]["name"] %></a></li>
         <% }} %>
     </ul>
 

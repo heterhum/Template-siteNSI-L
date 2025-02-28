@@ -214,7 +214,7 @@ app.post("/login", async function (req, res) {
     const usercookie = cookiegenerator(numbergen)
     await modifie_user_data(client,username,"cookie.usercookie",usercookie) 
     res.cookie("usercookie",usercookie)
-    res.redirect('/user/'+username)
+    res.redirect('/'+username)
     console.log(username, " connected successfully")
   } else {
     res.status(204).send()
@@ -237,7 +237,7 @@ app.post("/create", async function (req, res) { // TO DO : systeme de cookie pou
 });
 //--------------------------------------------------------------
 
-app.get('/user/:uid', async function(req, res,next) { // TO DO : systeme de cookie pour la connexion
+app.get('/:uid', async function(req, res,next) { // TO DO : systeme de cookie pour la connexion
   var uid = req.params.uid;
   var data= await see_user_data(client,uid).catch(console.error);
   if (data!=null && req.cookies.usercookie==data.cookie.usercookie){
@@ -255,7 +255,7 @@ app.get('/user/:uid', async function(req, res,next) { // TO DO : systeme de cook
   };
 });
 app.use('/static',express.static(__dirname+'/Site_cloud/server/views'),(req,res,next)=>{next()});
-app.use('/user/:uid/file', (req, res, next) => { // TO DO : Verif securité aprés systeme de cookie
+app.use('/:uid/file', (req, res, next) => { // TO DO : Verif securité aprés systeme de cookie
   var uid=req.params.uid;
   express.static(__dirname+'/Site_cloud/public/Personnal_file/'+uid)(req,res,next); 
 });
