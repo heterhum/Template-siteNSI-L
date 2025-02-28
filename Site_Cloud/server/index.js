@@ -228,7 +228,7 @@ app.post("/create", async function (req, res) { // TO DO : systeme de cookie pou
   var data = await see_user_data(client,username).catch(console.error)
 
   if (data.password==password && data!=null){
-    res.redirect('/user/'+username)
+    res.redirect('/'+username)
     console.log(username, " connected successfully")
   } else {
     res.status(204).send()
