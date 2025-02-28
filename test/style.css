@@ -1,4 +1,118 @@
-#theone{
+body{
+    background-image: url("/test/poly-background.png") ;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+html{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* google font */   
+    font: var(--dt-title-small-font,500 .875rem/1.25rem "Google Sans"),"Google Sans",Roboto,Arial,sans-serif;
+}
+
+/* From Uiverse.io by bociKond */ 
+.form {
+    --bg-light: #efefef;
+    --bg-dark: #707070;
+    --clr: #58bc82;
+    --clr-alpha: #9c9c9c60;
+    --clr-beta: #1a2424;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .form .input-span {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .form input[type="text"],
+  .form input[type="password"] {
+    border-radius: 0.5rem;
+    padding: 1rem 0.75rem;
+    width: 100%;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--clr-alpha);
+    outline: 2px solid var(--bg-dark);
+  }
+  
+  .form input[type="text"]:focus,
+  .form input[type="password"]:focus {
+    outline: 2px solid var(--clr-beta);
+  }
+  
+  .label {
+    align-self: flex-start;
+    color: var(--clr-beta);
+    font-weight: 600;
+  }
+  
+  .form .submit {
+    padding: 1rem 0.75rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 3rem;
+    background-color: var(--clr-beta);
+    color: var(--bg-light);
+    border: none;
+    cursor: pointer;
+    transition: all 300ms;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  
+  .form .submit:hover {
+    background-color: var(--clr);
+    color: var(--bg-dark);
+  }
+  
+  .span {
+    text-decoration: none;
+    color: var(--bg-dark);
+  }
+  
+  .span a {
+    color: var(--clr-beta);
+  }
+  
+
+#connect1{
+    
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 400px;
+    height: 400px;
+}
+#back{
+    background: linear-gradient(145deg, #00441B,#006D2C,#238B45,#41AE76,#66C2A4,#99D8C9,#D0D1E6,#ECE2F0, #F7FCFD);
+    border-radius: 40px;
+    box-shadow:  7px 7px 50px #D0D1E6,
+                -7px -7px 50px #00441B;
+    opacity: 0.5;
     position: absolute;
-    background-color: red;
+    width: 400px;
+    height: 400px;
+    z-index: -1;
+    
+}
+#sitename{
+    color:#1a2424;
 }
