@@ -6,11 +6,31 @@
 </head>
 <body>
   <header id="Header">
-    <div id="Logo"></div>
-    <div id="Search"></div>
-    <div id="Connection"></div>
+    <div id="Logo">Heterhum</div>
+    <div id="Search"><input type="text"></div>
+    <div id="Connection"> logo</div>
   </header>
-  <div id="SideBar"></div>
-  <div id="Main"></div>
+  <div id="SideBar">
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <input type="file" name="file" id="file" required />
+      <br>
+      <input type="submit" value="Send" />
+    </form>
+  </div>
+  <div id="Main">
+    <ul id="MainList"> 
+      <li id="NoFileError">No files, nom, date d'ajout, taille,type</li>
+      <li class="MainListItem" id="test">
+        <div class="ItemImage">image</div>
+        <div class="ItemName"><a href="#" download>exemple</a></div>
+        <div class="ItemDate">date</div>
+        <div class="ItemSize">size</div>
+        <div class="ItemType">type</div>
+      </li>
+      <li class="MainListItem" id="test"><a href="#" download>exemple1</a></li>
+      <li class="MainListItem" id="test"><a href="#" download>exemple2</a></li>
+      
+    </ul>
+  </div>
 </body>
 </html>
