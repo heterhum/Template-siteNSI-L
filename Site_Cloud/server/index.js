@@ -192,7 +192,7 @@ app.get('/', async function(req, res) { // main page
   var filepath=path.join(__dirname,"Site_Cloud","public","main.html")
   const puser =await see_user_cookie(client,req.cookies.usercookie) // TO DO : Bouton de login / deconection direct sur la page user
   if (puser != null){
-    res.redirect('/user/'+puser)
+    res.redirect('/'+puser)
   } else {
   res.sendFile(filepath);
   console.log("someone is on the main page")
