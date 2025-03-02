@@ -6,7 +6,7 @@ html{
 body{
   background-color: rgb(0, 0, 0);
   display: grid;
-  grid-template-columns: 25% 75% ;
+  grid-template-columns: 256px auto ;
   grid-template-rows: 8% 92% ;
   grid-template-areas: 
     "header header "
@@ -18,8 +18,11 @@ body{
 #Header {
   grid-area: header;
   background-color: aqua;
-  display: flex;
-
+  display: grid;
+  grid-template-columns: 256px auto 10% ;
+  grid-template-rows: 100% ;
+  grid-template-areas: 
+    "Logo Search Connection";
   justify-content: left;
 }
 #Main {
@@ -33,14 +36,18 @@ body{
 
 
 #Logo {
-  width: 25%;
+  width: 256px;
   background-color: rgb(255, 255, 255);
+  grid-area: Logo;
 }
 #Search {
   background-color: rgb(0, 0, 0);
-  width: 55%;
+  grid-area: Search;
+  width: 100%;
+  
 }
 #Connection {
   background-color: rgb(223, 0, 0);
-  width: 20%;
+  width: auto;
+  grid-area: Connection;
 }
