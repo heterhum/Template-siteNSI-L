@@ -13,6 +13,8 @@ body{
     "sidebar main ";
     margin: 0;
     height: 100%;
+        /* google font */   
+        font: var(--dt-title-small-font,500 .875rem/1.25rem "Google Sans"),"Google Sans",Roboto,Arial,sans-serif;
 }
 
 #Header {
@@ -23,26 +25,26 @@ body{
 }
 #Main {
   grid-area: main;
-  background-color: brown;
+  background-color: rgb(19, 19, 19);
   overflow: auto;
 }
 #SideBar {
   grid-area: sidebar;
-  background-color: rgb(66, 210, 30);
+  background-color: rgb(43, 43, 43);
 }
 
 
 #Logo {
-  background-color: rgb(255, 255, 255);
+  background-color: rgb(43, 43, 43);
   width: 256px;
 }
 #Search {
-  background-color: rgb(0, 0, 0);
+  background-color: rgb(43, 43, 43);
   width: auto;
   flex-grow: 1;
 }
 #Connection {
-  background-color: rgb(223, 0, 0);
+  background-color: rgb(43, 43, 43);
   width: 100px;
 }
 
@@ -50,49 +52,79 @@ body{
 
 #MainList{
   list-style-type: none;
-  padding-left: 0px;
+  padding-left: 30px;
+  padding-right: 30px;
+  color: #ffffff;
 }
 .MainListItem{
   line-height: 48px;
-  background: white;
+  background-color: rgb(19, 19, 19);
   border-bottom: 1px solid #c7c7c7;
   display: flex;
   justify-content: left;
 }
 
 .ItemImage{
-  background-color: rgb(255, 94, 0);
-  width: 48px;
   min-width: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.ItemImage img{
+  width: 30px;
+  height: 30px;
 }
 
-.ItemImage img{
-  background-color: rgb(0, 0, 0);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 .ItemName{
-  background-color: rgb(251, 255, 0);
   width: auto;
   flex-grow: 1;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  color: #ffffff;
 }
 .ItemDate{
-  background-color: rgb(102, 255, 0);
   min-width: 100px;
+  display: flex;
+  justify-content: center;
+  color: #ffffff;
 }
 .ItemSize{
-  background-color: rgb(0, 255, 115);
   min-width: 100px;
+  display: flex;
+  justify-content: center;
+  color:#ffffff;
 }
 .ItemType{
-  background-color: rgb(0, 255, 255);
   min-width: 80px;
+  display: flex;
+  justify-content: center;
+  color:white;
 }
+
 .ItemRemove{
-  background-color: rgb(0, 38, 255);
   min-width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ItemRemove img{
+  width: 25px;
+  height: 25px;
+}
+
+
+#MainList a {
+  outline: none;
+  text-decoration: none;
+}
+
+#MainList a:link {
+  color: #ffffff;
+}
+
+#MainList a:hover {
+  background: #ffffff;
+  color: black;
+  border-radius: 5px;
 }
