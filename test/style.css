@@ -63,6 +63,7 @@ body{
 .ItemImage{
   background-color: rgb(255, 94, 0);
   width: 48px;
+  min-width: 48px;
 }
 
 .ItemImage img{
@@ -81,17 +82,17 @@ body{
 }
 .ItemDate{
   background-color: rgb(102, 255, 0);
-  width: 100px;
+  min-width: 100px;
 }
 .ItemSize{
   background-color: rgb(0, 255, 115);
-  width:100px;
+  min-width: 100px;
 }
 .ItemType{
   background-color: rgb(0, 255, 255);
-  width: 80px;
+  min-width: 80px;
 }
 .ItemRemove{
   background-color: rgb(0, 38, 255);
-  width: 48px;
+  min-width: 48px;
 }
