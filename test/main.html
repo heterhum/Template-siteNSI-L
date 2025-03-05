@@ -2,6 +2,7 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="/test/style.css"> 
+    <script src="/test/script.js"></script>
     <title>heterhum</title>
 </head>
 <body>
@@ -12,25 +13,27 @@
   </header>
   <div id="SideBar">
     <form action="/upload" method="post" enctype="multipart/form-data">
+      <label for="file" id="Upload">Upload</label>
       <input type="file" name="file" id="file" required />
-      <br>
-      <input type="submit" value="Send" />
     </form>
   </div>
   <div id="Main">
     <ul id="MainList"> 
-      <li id="NoFileError">No files, nom, date d'ajout, taille,type</li>
-      <li class="MainListItem" id="test">
-        <div class="ItemImage"><img  src="/test/icone file checkg.webp" width="100%" height="100%"></div>
-        <div class="ItemName"><a href="#" download>exempleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</a></div>
-        <div class="ItemDate">date</div>
-        <div class="ItemSize">size</div>
-        <div class="ItemType">type</div>
-        <div class="ItemRemove">remove</div>
+      <li class="MainListItem" id="HautDePage">
+        <div class="ItemName">Nom</div>
+        <div class="ItemDate">Date d'ajout</div>
+        <div class="ItemSize">Taille</div>
+        <div class="ItemType">Type</div>
+        <div class="ItemRemove"><img  src="/test/poubellebb1.webp"></div>
       </li>
-      <li class="MainListItem" id="test"><a href="#" download>exemple1</a></li>
-      <li class="MainListItem" id="test"><a href="#" download>exemple2</a></li>
-      
+      <li class="MainListItem" id="test" href="#" ondblclick="handleDivDoubleClick()">
+        <div class="ItemImage"><img  src="/test/icone file checkg.webp" ></div>
+        <div class="ItemName"><p >test</p></div>
+        <div class="ItemDate">2025-02-12</div>
+        <div class="ItemSize">3 Go</div>
+        <div class="ItemType">image</div>
+        <div class="ItemRemove"><button type="button" ondblclick="handleButtonDoubleClick()"><img  src="/test/poubellebb1.webp"></button></div>
+      </li>
     </ul>
   </div>
 </body>

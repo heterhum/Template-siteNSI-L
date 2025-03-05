@@ -64,6 +64,25 @@ body{
   justify-content: left;
 }
 
+#MainList :hover {
+  background-color: #575757;
+  border-radius: 0 0 5px 5px  ;
+  cursor: default;
+}
+#MainList p {
+  outline: none;
+  text-decoration: none;
+}
+#MainList button:hover{
+background-color: #383838;
+border-radius: 50%;
+width: 35px;
+height: 35px;
+}
+#MainList img:hover{
+  background-color: #00000000;
+}
+
 .ItemImage{
   min-width: 48px;
   display: flex;
@@ -82,24 +101,33 @@ body{
   white-space: nowrap;
   text-overflow: ellipsis;
   color: #ffffff;
+  align-items: center;
 }
+
+.ItemName p{
+  margin: auto;
+}
+
 .ItemDate{
   min-width: 100px;
   display: flex;
   justify-content: center;
   color: #ffffff;
+  align-items: center;
 }
 .ItemSize{
   min-width: 100px;
   display: flex;
   justify-content: center;
   color:#ffffff;
+  align-items: center;
 }
 .ItemType{
   min-width: 80px;
   display: flex;
   justify-content: center;
   color:white;
+  align-items: center;
 }
 
 .ItemRemove{
@@ -107,24 +135,52 @@ body{
   display: flex;
   align-items: center;
   justify-content: center;
+  align-items: center;
+
 }
 .ItemRemove img{
   width: 25px;
   height: 25px;
 }
 
-
-#MainList a {
-  outline: none;
-  text-decoration: none;
+.ItemRemove button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  appearance: none;
+  background-color: #00000000;
+  border: none;
 }
+#HautDePage div:hover{
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 0;
+}
+#HautDePage:hover{
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 0;
+}
+/*-------------------------------------------------------------*/
 
-#MainList a:link {
+input[type=file] {
+  display: none;
+}
+#SideBar{
+  display: flex;
+  justify-content: center;
+
+}
+#Upload{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  height: 48px;
+  background-color: #7f8680;
   color: #ffffff;
+  font-size: 20px;
+  border-radius: 20px;
+}
+#Upload:hover{
+  background-color: #1b1b1b;
 }
 
-#MainList a:hover {
-  background: #ffffff;
-  color: black;
-  border-radius: 5px;
-}
