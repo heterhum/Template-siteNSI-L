@@ -246,7 +246,7 @@ app.get('/:uid', async function(req, res,next) { // TO DO : systeme de cookie po
     res.render('HPuser',
       {"pp":data["pp"],
        "name":uid,
-       "datafile":data["file"],
+       "datafile":data["file"]
       }); //Bien organiser
     next();
   } else{
@@ -284,7 +284,15 @@ app.post('/upload/:uid', (req, res) => { // Ajouté sécurité, si l'utilisateur
   
 });
 
+//--------------------------------------------------------------
 
+io.on ('connection', (socket) => {
+  console.log('a user connected');
+  socket.on("filedel",(usercookie,filename) =>{
+    // supprimer le fichier
+    io.to(socket.id).emit("reussie",true);
+  });
+});
 
 //démmarage !
 server.listen(PORT, () => {
