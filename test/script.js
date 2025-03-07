@@ -1,16 +1,21 @@
-function handleDivDoubleClick() {
-    console.log("Double-clic sur la div !");
-}
+const socket = io();
 
-function handleButtonDoubleClick(event) {
-
-    console.log("Double-clic sur le bouton !");
+function FileRemove(file){
+    socket.emit("filedel",document.cookie,file.closest("li").id)
 }
+socket.on("reussie",function(){
+    console.log("file deleted")
+    window.location.reload()
+});
 
 window.onload = function() {
-document.getElementById("file").addEventListener("change", function() {
-    console.log("File changed !");
-    //document.getElementById("uploadForm").submit();
+    document.getElementById("file").addEventListener("change", function() {
+        document.getElementById("uploadForm").submit();
+    });
+    document.getElementsByClassName("userbutton")[0].addEventListener("click", function() {
+        document.cookie="";
+        window.location.href = "/";
+    
+
 });
 };
-//a faire : gérer le telechargement, gere la suppression, les couleurs (discord), la barre en haut de la liste ... 

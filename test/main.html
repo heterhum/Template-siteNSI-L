@@ -1,18 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="/test/style.css"> 
-    <script src="/test/script.js"></script>
-    <title>heterhum</title>
+    <link rel="stylesheet" type="text/css" href="/static/HPuser.css"> 
+    <script src="https://cdn.socket.io/3.1.3/socket.io.min.js" integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script>
+    <script src="/static/HPuser.js"></script>
+    <title><%= name %></title>
 </head>
 <body>
   <header id="Header">
-    <div id="Logo">Heterhum</div>
-    <div id="Search"><input type="text"></div>
-    <div id="Connection"> logo</div>
+    <div id="Logo"><h1>Heterhum</h1></div>
+    <div id="SearchMain">
+      <div class="search">
+        <input type="text" class="search__input" placeholder="Type your text">
+        <button class="search__button">
+          <svg class="search__icon" aria-hidden="true" viewBox="0 0 24 24">
+              <g>
+                  <path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path>
+              </g>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div id="Connection"><button class="userbutton"><img class="userimg"src="<%= pp%>"></button></div>
   </header>
   <div id="SideBar">
-    <form action="/upload" method="post" enctype="multipart/form-data">
+    <form action="/upload/<%= name %>" method="post" enctype="multipart/form-data">
       <label for="file" id="Upload">Upload</label>
       <input type="file" name="file" id="file" required />
     </form>
@@ -26,15 +38,40 @@
         <div class="ItemType">Type</div>
         <div class="ItemRemove"><img  src="/test/poubellebb1.webp"></div>
       </li>
-      <li class="MainListItem" id="test" href="#" ondblclick="handleDivDoubleClick()">
+      <li class="MainListItem" id="test" href="#" ondblclick="DownLoad(this)">
         <div class="ItemImage"><img  src="/test/icone file checkg.webp" ></div>
         <div class="ItemName"><p >test</p></div>
         <div class="ItemDate">2025-02-12</div>
         <div class="ItemSize">3 Go</div>
         <div class="ItemType">image</div>
-        <div class="ItemRemove"><button type="button" ondblclick="handleButtonDoubleClick()"><img  src="/test/poubellebb1.webp"></button></div>
+        <div class="ItemRemove"><button type="button" class="removebut" onclick="FileRemove(this)"><img  src="/test/poubellebb1.webp"></button></div>
       </li>
+      <%if (datafile.length == 0) { %>
+        <li>No files</li>
+      <% } else {
+          for(let key in datafile) { %>
+          <li id="<%= key %>"><a href="/<%= name %>/file/<%= key + datafile[key]['extention']%>" download><%= datafile[key]["name"] %></a></li>
+          <li class="MainListItem" id="<%= key %>" href="#" ondblclick="DownLoad(this)">
+            <div class="ItemImage"><img  src="/test/icone file checkg.webp" ></div>
+            <div class="ItemName"><p><%= datafile[key]["name"] %></p></div>
+            <div class="ItemDate"><%= datafile[key]["date"] %></div>
+            <div class="ItemSize"><%= datafile[key]["size"] %></div>
+            <div class="ItemType"><%= datafile[key]["mime-type"] %></div>
+            <div class="ItemRemove"><button type="button" class="removebut" onclick="FileRemove(this)"><img  src="/test/poubellebb1.webp"></button></div>
+          </li>
+      <% }} %>
     </ul>
   </div>
+  <script>
+  function DownLoad(element) {
+    const id=element.getAttribute("id");
+    const link = document.createElement("a");
+    link.href = "/<%= name %>/file/<%= key + datafile[key]['extention']%>";
+    link.download = "download"; 
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+  </script>
 </body>
 </html>
