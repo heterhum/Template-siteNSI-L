@@ -4,8 +4,8 @@ function FileRemove(file){
     socket.emit("filedel",document.cookie,file.closest("li").id)
 }
 socket.on("reussie",function(){
-    console.log("file deleted")
     window.location.reload()
+    console.log("file deleted")
 });
 
 window.onload = function() {
@@ -13,8 +13,9 @@ window.onload = function() {
         document.getElementById("uploadForm").submit();
     });
     document.getElementsByClassName("userbutton")[0].addEventListener("click", function() {
-        document.cookie="";
+        document.cookie="usercookie=;";
         window.location.href = "/";
+
     
 
 });

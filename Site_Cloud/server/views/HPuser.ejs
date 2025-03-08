@@ -4,6 +4,7 @@
     <link rel="stylesheet" type="text/css" href="/static/HPuser.css"> 
     <script src="https://cdn.socket.io/3.1.3/socket.io.min.js" integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script>
     <script src="/static/HPuser.js"></script>
+    <link rel="icon" type="image/png" href="/static/img/cloud-computing.png">
     <title><%= name %></title>
 </head>
 <body>
@@ -24,7 +25,7 @@
     <div id="Connection"><button class="userbutton"><img class="userimg"src="<%= pp%>"></button></div>
   </header>
   <div id="SideBar">
-    <form action="/upload/<%= name %>" method="post" enctype="multipart/form-data">
+    <form action="/upload/<%= name %>" method="post" id="uploadForm" enctype="multipart/form-data">
       <label for="file" id="Upload">Upload</label>
       <input type="file" name="file" id="file" required />
     </form>
@@ -42,7 +43,7 @@
         <li>No files</li>
       <% } else { %>
           <% for(let key in datafile) { %>
-          <li class="MainListItem" id="<%= key %>" href="#" ondblclick="DownLoad(this)">
+          <li class="MainListItem" id="<%= key %>" chemin="<%= name %>/file/<%=key + datafile[key]['extention']%>" href="#" ondblclick="DownLoad(this)">
             <div class="ItemImage"><img  src="/static/img/icone file checkg.webp" ></div>
             <div class="ItemName"><p><%= datafile[key]["name"] %></p></div>
             <div class="ItemDate"><%= datafile[key]["date"] %></div>
@@ -55,9 +56,9 @@
   </div>
   <script> //erreur vient PAS de la
   function DownLoad(element) {
-    const id=element.getAttribute("id");
+    const chemin=element.getAttribute("chemin");
     const link = document.createElement("a");
-    link.href = `/<%= name %>/file/${id} + <%=datafile[${id}]['extention']%>`;
+    link.href = chemin;
     link.download = "download"; 
     document.body.appendChild(link);
     link.click();

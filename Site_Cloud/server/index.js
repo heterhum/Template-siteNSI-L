@@ -21,21 +21,21 @@ const numbergen=17;
 const stringselec = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 const templateuser = {
-    "username": "",
-    "password": "",
-    "pp": "",
+    "username": null,
+    "password": null,
+    "pp": null,
     "cookie": {
-      "date": "",
-      "usercookie": ""
+      "date": null,
+      "usercookie": null
     },
     "file": {}
 };
 const templatefile = {
-    "date": "",
-    "name": "",
-    "size": "",
-    "mime-type": "",
-    "extention": ""
+    "date": null,
+    "name": null,
+    "size": null,
+    "mime-type": null,
+    "extention": null
 };
 
 function cookiegenerator(max) {
