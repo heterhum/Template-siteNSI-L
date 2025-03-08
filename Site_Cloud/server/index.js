@@ -21,12 +21,12 @@ const numbergen=17;
 const stringselec = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 const templateuser = {
-    "username": null,
-    "password": null,
-    "pp": null,
+    "username": "no",
+    "password": "no",
+    "pp": "https://cdn-icons-png.flaticon.com/512/1144/1144760.png",
     "cookie": {
       "date": null,
-      "usercookie": null
+      "usercookie": "no"
     },
     "file": {}
 };
@@ -104,13 +104,13 @@ async function modifie_user_data(client,name,modifplace,modif){
       await client.close();}
 };
 
-async function create_new_user(client,name,password,pp){ 
+async function create_new_user(client,name,password,pp=null){ 
   var newuser=templateuser;
   newuser["username"]=name;
   newuser["password"]=password;
   if (pp){
     newuser["pp"]=pp;
-  } else {newuser["pp"]="default.png"; };
+  } 
   try {
       await client.connect();
       try {
@@ -190,7 +190,7 @@ function permulter(userID){
 // Genere page html de l'acceuil + css + js +img ect ...
 app.get('/', async function(req, res) { // main page
   var filepath=path.join(__dirname,"Site_Cloud","public","main.html")
-  const puser =await see_user_cookie(client,req.cookies.usercookie) // TO DO : Bouton de login / deconection direct sur la page user
+  const puser =await see_user_cookie(client,req.cookies.usercookie) 
   if (puser != null){
     res.redirect('/'+puser)
   } else {
@@ -205,35 +205,48 @@ app.use('/static',express.static(__dirname+'/Site_cloud/public'));
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 app.post("/login", async function (req, res) { 
-  const password = req.body.connectpassword;
-  const username = req.body.connectusername;
+  try {
+    const password = req.body.connectpassword;
+    const username = req.body.connectusername;
+    var data = await see_user_data(client,username).catch(console.error)
 
-  var data = await see_user_data(client,username).catch(console.error)
+    if (data.password==password && data!=null){
+      const usercookie = cookiegenerator(numbergen)
+      await modifie_user_data(client,username,"cookie.usercookie",usercookie) 
+      res.cookie("usercookie",usercookie)
+      res.redirect('/'+username)
+      console.log(username, " connected successfully")
+    } else {
+      res.status(204).send()
+      console.log("someone try to connect but fail")
+  }
+  } catch (err) {
+    //res.redirect('/')
+  }
 
-  if (data.password==password && data!=null){
+});
+app.post("/create", async function (req, res) { // TO DO : systeme de cookie pour la connexion
+  try {
+    const password = req.body.createmdp ;
+    const username = req.body.createname;
+    var data = await see_user_data(client,username).catch(console.error)
+  if ( data==null && password!=null && username!=null){
+    await create_new_user(client,username,password) // sécu password, cryptage ect ...
     const usercookie = cookiegenerator(numbergen)
     await modifie_user_data(client,username,"cookie.usercookie",usercookie) 
     res.cookie("usercookie",usercookie)
     res.redirect('/'+username)
-    console.log(username, " connected successfully")
   } else {
     res.status(204).send()
-    console.log("someone try to connect but fail")
+    io.emit("creation",false);
+    console.log("someone try to create an account but fail")
   }
-});
-app.post("/create", async function (req, res) { // TO DO : systeme de cookie pour la connexion
-  const password = req.body.createmdp;
-  const username = req.body.createname;
-
-  var data = await see_user_data(client,username).catch(console.error)
-
-  if (data.password==password && data!=null){
-    res.redirect('/'+username)
-    console.log(username, " connected successfully")
-  } else {
-    res.status(204).send()
-    console.log("someone try to connect but fail")
+  } catch (err) {
+    //res.redirect('/')
   }
+  
+
+
 });
 //--------------------------------------------------------------
 
