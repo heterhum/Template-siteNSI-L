@@ -205,12 +205,11 @@ app.use('/static',express.static(__dirname+'/Site_cloud/public'));
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 app.post("/login", async function (req, res) { 
-  try {
     const password = req.body.connectpassword;
     const username = req.body.connectusername;
     var data = await see_user_data(client,username).catch(console.error)
 
-    if (data.password==password && data!=null){
+    if ( password!=(null || "") && data!=null && data.password==password){
       const usercookie = cookiegenerator(numbergen)
       await modifie_user_data(client,username,"cookie.usercookie",usercookie) 
       res.cookie("usercookie",usercookie)
@@ -220,17 +219,12 @@ app.post("/login", async function (req, res) {
       res.status(204).send()
       console.log("someone try to connect but fail")
   }
-  } catch (err) {
-    //res.redirect('/')
-  }
-
 });
 app.post("/create", async function (req, res) { // TO DO : systeme de cookie pour la connexion
-  try {
     const password = req.body.createmdp ;
     const username = req.body.createname;
     var data = await see_user_data(client,username).catch(console.error)
-  if ( data==null && password!=null && username!=null){
+  if ( data==null && password!=(null || "") && username!=(null||"") ){
     await create_new_user(client,username,password) // sécu password, cryptage ect ...
     const usercookie = cookiegenerator(numbergen)
     await modifie_user_data(client,username,"cookie.usercookie",usercookie) 
@@ -241,12 +235,6 @@ app.post("/create", async function (req, res) { // TO DO : systeme de cookie pou
     io.emit("creation",false);
     console.log("someone try to create an account but fail")
   }
-  } catch (err) {
-    //res.redirect('/')
-  }
-  
-
-
 });
 //--------------------------------------------------------------
 
@@ -300,7 +288,6 @@ app.post('/upload/:uid', (req, res) => { // Ajouté sécurité, si l'utilisateur
 //--------------------------------------------------------------
 
 io.on ('connection', (socket) => {
-  console.log('a user connected');
   socket.on("filedel",(usercookie,filename) =>{
     // supprimer le fichier
     io.to(socket.id).emit("reussie",true);
