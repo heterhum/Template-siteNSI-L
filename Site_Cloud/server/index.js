@@ -11,6 +11,7 @@ const io = new Server(server);
 const PORT = 3000;
 const path = require('path');
 const __dirname = path.resolve();
+var fs = require('fs');
 import multer from 'multer';
 app.use(cookieParser());
 app.set("views", path.join(__dirname, "/Site_cloud/server/views"));
@@ -170,6 +171,24 @@ async function delete_user(client,name){
       console.error(e);
       await client.close();}
 };
+
+async function delete_file(client,name,modiffilename){ 
+  const modification={[`file.${modiffilename}`]: ""}
+  try {
+      await client.connect();
+      try {
+        await client.db("myDB").collection("users").updateOne({"username":name},{$unset:modification});
+        await client.close();
+        return true
+      } catch (e) {
+        console.error(e);
+        await client.close();
+        return false
+      }
+  } catch (e) {
+      console.error(e);
+      await client.close();}
+};
 //! Database
 
 // Upload file
@@ -288,8 +307,19 @@ app.post('/upload/:uid', (req, res) => { // Ajouté sécurité, si l'utilisateur
 //--------------------------------------------------------------
 
 io.on ('connection', (socket) => {
-  socket.on("filedel",(usercookie,filename) =>{
-    // supprimer le fichier
+  socket.on("filedel",async (msg) =>{
+    console.log("someone try to delete a file")
+    //console.log(msg.cookie.split("=")[1], msg.id)
+    const usercookie=msg.cookie.split("=")[1]
+    const name = await see_user_cookie(client,usercookie).catch(console.error)
+    //"/Site_Cloud/public/Personnal_file/"+name+"/"+msg.id+"."+msg.extention
+    if(msg.id.includes("./")){
+      io.to(socket.id).emit("reussie",false);
+      return
+    }
+    const filepath=path.resolve("Site_Cloud","public","Personnal_file",name,msg.id+"."+msg.extention)
+    fs.unlinkSync(filepath);
+    await delete_file(client,name,msg.id)
     io.to(socket.id).emit("reussie",true);
   });
 });

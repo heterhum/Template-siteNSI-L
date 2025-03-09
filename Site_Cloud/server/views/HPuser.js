@@ -1,11 +1,12 @@
 const socket = io();
 
 function FileRemove(file){
-    socket.emit("filedel",document.cookie,file.closest("li").id)
+    //console.log(file.closest("li").attributes["chemin"].value);
+    socket.emit("filedel",{"cookie":document.cookie,"id":file.closest("li").id,"extention":file.closest("li").attributes["chemin"].value.split(".").at(-1)});
 }
-socket.on("reussie",function(){
+socket.on("reussie",function(e){
     window.location.reload()
-    console.log("file deleted")
+    console.log("file delete ?",e)
 });
 
 window.onload = function() {
