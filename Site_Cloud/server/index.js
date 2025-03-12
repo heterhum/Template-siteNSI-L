@@ -10,6 +10,7 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 const PORT = 3000;
 const path = require('path');
+const bcrypt = require('bcrypt');
 const __dirname = path.resolve();
 var fs = require('fs');
 import multer from 'multer';
@@ -17,6 +18,8 @@ app.use(cookieParser());
 app.set("views", path.join(__dirname, "/Site_cloud/server/views"));
 app.set("view engine", "ejs");
 require('dotenv').config();
+
+const saltRounds = 12;
 
 const numbergen=17;
 const stringselec = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -329,7 +332,14 @@ server.listen(PORT, () => {
   console.log(`Serveur démarré : http://localhost:${PORT}`)
 });
 
-
+var password = "Fkdj^45ci@Jad";
+bcrypt.genSalt(saltRounds, function(err, salt) {
+  bcrypt.hash(password, salt, function(err, hash) {
+    bcrypt.compare(password, hash, function(err, result) {
+      console.log(result);
+  });
+  });
+});
 //later
   //var filepath=path.join(__dirname,"Site_Cloud","public","main.html")
   //res.sendFile (filepath);
