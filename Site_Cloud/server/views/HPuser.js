@@ -3,9 +3,9 @@ const socket = io();
 function FileRemove(file){
     //console.log(file.closest("li").attributes["chemin"].value);
     socket.emit("filedel",{"cookie":document.cookie,"id":file.closest("li").id,"extention":file.closest("li").attributes["chemin"].value.split(".").at(-1)});
+    document.getElementById(file.closest("li").id).remove();
 }
 socket.on("reussie",function(e){
-    window.location.reload()
     console.log("file delete ?",e)
 });
 
