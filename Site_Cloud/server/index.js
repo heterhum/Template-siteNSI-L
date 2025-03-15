@@ -131,7 +131,7 @@ async function create_new_user(client,name,password,pp=null){
       await client.close();}
 };
 
-async function add_user_file(client,name,filename,date,fakename,size,extention){ //maybe put an random at the end of the filename so we can reconize it, but keep the original name somewhere
+async function add_user_file(client,name,filename,date,fakename,size,extention){ 
   var newfile=templatefile;
   var ext=path.extname(fakename);
 
@@ -198,7 +198,8 @@ async function delete_file(client,name,modiffilename){
 function permulter(userID){
   const storage = multer.diskStorage({
     destination: function (req, file, callback) {
-      callback(null, path.join(__dirname,"Site_Cloud","public","Personnal_file",userID)); // TO DO : pouvoir changé le nom du dossier en fonction de l'utilisateur
+      const pathtemp=path.join(__dirname,"Site_Cloud","public","Personnal_file",userID)
+      callback(null, pathtemp); 
     },
     filename: function (req, file, callback) {
       const uniqueSuffix = cookiegenerator(10);
@@ -208,6 +209,7 @@ function permulter(userID){
   var upload = multer({ storage: storage });
   return upload
 };
+
 
 // Genere page html de l'acceuil + css + js +img ect ...
 app.get('/', async function(req, res) { // main page
@@ -242,7 +244,7 @@ app.post("/login", async function (req, res) {
       console.log("someone try to connect but fail")
   }
 });
-app.post("/create", async function (req, res) { // TO DO : systeme de cookie pour la connexion
+app.post("/create", async function (req, res) { 
     const password = req.body.createmdp ;
     const username = req.body.createname;
     var data = await see_user_data(client,username).catch(console.error)
@@ -262,7 +264,7 @@ app.post("/create", async function (req, res) { // TO DO : systeme de cookie pou
 });
 //--------------------------------------------------------------
 
-app.get('/:uid', async function(req, res,next) { // TO DO : systeme de cookie pour la connexion
+app.get('/:uid', async function(req, res,next) { 
   var uid = req.params.uid;
   var data= await see_user_data(client,uid).catch(console.error);
   if (data!=null && req.cookies.usercookie==data.cookie.usercookie){
@@ -272,7 +274,7 @@ app.get('/:uid', async function(req, res,next) { // TO DO : systeme de cookie po
       {"pp":data["pp"],
        "name":uid,
        "datafile":data["file"]
-      }); //Bien organiser
+      }); 
     next();
   } else{
     res.redirect('/');
@@ -280,33 +282,50 @@ app.get('/:uid', async function(req, res,next) { // TO DO : systeme de cookie po
   };
 });
 app.use('/static',express.static(__dirname+'/Site_cloud/server/views'),(req,res,next)=>{next()});
-app.use('/:uid/file', (req, res, next) => { // TO DO : Verif securité aprés systeme de cookie
+app.use('/:uid/file', (req, res, next) => { 
   var uid=req.params.uid;
-  express.static(__dirname+'/Site_cloud/public/Personnal_file/'+uid)(req,res,next); 
+  var userpath=path.resolve("Site_Cloud","public","Personnal_file",uid)
+  if (userpath.startsWith(path.resolve("Site_Cloud","public","Personnal_file"))){
+    express.static(__dirname+'/Site_cloud/public/Personnal_file/'+uid)(req,res,next); 
+  }
+  else{
+    res.status(404).send()
+  }
 });
 
 //--------------------------------------------------------------
 
-app.post('/upload/:uid', (req, res) => { // Ajouté sécurité, si l'utilisateur modifie le action post avec f12 alors il peut upload ou il veut
-  permulter(req.params.uid).single('file')(req, res, function (err) {
-    try {
-      console.log(req.params.uid, " successfully uploaded a file")
+app.post('/upload/:uid', async(req, res) => {
+  var uid = req.params.uid;
+  var data= await see_user_data(client,uid).catch(console.error); 
 
-      const name =req.params.uid
-      const filename = req.file.filename.split('.')[0]
-      const date = dategenerator()
-      const fakename = req.file.originalname
-      const size = req.file.size
-      const type = req.file.mimetype
+  if (data!=null && req.cookies.usercookie==data.cookie.usercookie){
 
-      add_user_file(client,name,filename,date,fakename,size,type)
-      res.status(204).send()
-    } catch (err) {
-      console.log(req.params.uid, " fail to uploaded a file")
-      res.status(400).send({ error: err.message });
+    var userpath=path.resolve("Site_Cloud","public","Personnal_file",uid)
+    if (userpath.startsWith(path.resolve("Site_Cloud","public","Personnal_file"))){
+      permulter(req.params.uid).single('file')(req, res, function (err) {
+        try {
+          console.log(req.params.uid, " successfully uploaded a file")
+        
+          const name =req.params.uid
+          const filename = req.file.filename.split('.')[0]
+          const date = dategenerator()
+          const fakename = req.file.originalname
+          const size = req.file.size
+          const type = req.file.mimetype
+        
+          add_user_file(client,name,filename,date,fakename,size,type)
+          res.status(204).send()
+        } catch (err) {
+          console.log(req.params.uid, " fail to uploaded a file")
+          res.status(400).send({ error: err.message });
+        }
+      });
     }
-  });// TO DO : Ajouté le fichier dans la DB
-  
+  } else {
+    res.status(204).send()
+    console.log("someone try to upload a file but fail")
+  };
 });
 
 //--------------------------------------------------------------
@@ -314,18 +333,18 @@ app.post('/upload/:uid', (req, res) => { // Ajouté sécurité, si l'utilisateur
 io.on ('connection', (socket) => {
   socket.on("filedel",async (msg) =>{
     console.log("someone try to delete a file")
-    //console.log(msg.cookie.split("=")[1], msg.id)
     const usercookie=msg.cookie.split("=")[1]
     const name = await see_user_cookie(client,usercookie).catch(console.error)
-    //"/Site_Cloud/public/Personnal_file/"+name+"/"+msg.id+"."+msg.extention
-    if(msg.id.includes("./")){
-      io.to(socket.id).emit("reussie",false);
-      return
-    }
+
+    const userpath=path.resolve("Site_Cloud","public","Personnal_file",name,msg.id)
+    if (userpath.startsWith(path.resolve("Site_Cloud","public","Personnal_file"))){
     const filepath=path.resolve("Site_Cloud","public","Personnal_file",name,msg.id+"."+msg.extention)
     fs.unlinkSync(filepath);
     await delete_file(client,name,msg.id)
     io.to(socket.id).emit("reussie",true);
+    } else {
+      io.to(socket.id).emit("reussie",false);
+    }
   });
 });
 
@@ -334,7 +353,4 @@ server.listen(PORT, () => {
   console.log(`Serveur démarré : http://localhost:${PORT}`)
 });
 
-//later
-  //var filepath=path.join(__dirname,"Site_Cloud","public","main.html")
-  //res.sendFile (filepath);
-  //app.use('/static',express.static(__dirname+'/Site_cloud/public'));
+
