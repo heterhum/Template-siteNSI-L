@@ -230,8 +230,8 @@ app.post("/login", async function (req, res) {
     const password = req.body.connectpassword;
     const username = req.body.connectusername;
     var data = await see_user_data(client,username).catch(console.error)
-
-    if ( password!=(null || "") && data!=null && data.password==password){
+    const result =await bcrypt.compare(password, data.password);
+    if ( password!=(null || "") && data!=null && result==true){
       const usercookie = cookiegenerator(numbergen)
       await modifie_user_data(client,username,"cookie.usercookie",usercookie) 
       res.cookie("usercookie",usercookie)
@@ -247,7 +247,9 @@ app.post("/create", async function (req, res) { // TO DO : systeme de cookie pou
     const username = req.body.createname;
     var data = await see_user_data(client,username).catch(console.error)
   if ( data==null && password!=(null || "") && username!=(null||"") ){
-    await create_new_user(client,username,password) // sécu password, cryptage ect ...
+    const salt=await bcrypt.genSalt(saltRounds).then();
+    const hashpassword= await bcrypt.hash(password, salt);
+    await create_new_user(client,username,hashpassword) 
     const usercookie = cookiegenerator(numbergen)
     await modifie_user_data(client,username,"cookie.usercookie",usercookie) 
     res.cookie("usercookie",usercookie)
@@ -332,14 +334,6 @@ server.listen(PORT, () => {
   console.log(`Serveur démarré : http://localhost:${PORT}`)
 });
 
-var password = "Fkdj^45ci@Jad";
-bcrypt.genSalt(saltRounds, function(err, salt) {
-  bcrypt.hash(password, salt, function(err, hash) {
-    bcrypt.compare(password, hash, function(err, result) {
-      console.log(result);
-  });
-  });
-});
 //later
   //var filepath=path.join(__dirname,"Site_Cloud","public","main.html")
   //res.sendFile (filepath);
